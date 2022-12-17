@@ -1,0 +1,11 @@
+uvicorn
+fastapi
+redis 
+pymongo
+pygelf 
+odmantic 
+requests 
+web3 
+celery 
+python-dotenv 
+pygelf
