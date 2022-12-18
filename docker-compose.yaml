@@ -18,6 +18,8 @@ services:
       - REDIS_HOST=mongo
       - REDIS_PORT=27017
       - REDIS_URL=mongodb://mongo:27017
+      - API_LIST=./data/api_keys.json
+
     networks:
       - mongo_db
       - redis_db
