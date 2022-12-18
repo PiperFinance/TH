@@ -1,4 +1,5 @@
 import logging
+from pydantic import parse_obj_as
 from fastapi import APIRouter
 
 from utils.trx.save_trxs import save_user_chain_token_trxs
@@ -20,7 +21,7 @@ async def save_user_chain_trxs(
             request.chainId,
             request.userAddress
         )
-        return BaseResponse()
+        return parse_obj_as(BaseResponse, {"result": "Successfully saved trxs"})
     except Exception as e:
         logging.exception(e)
 
@@ -35,6 +36,6 @@ async def save_multipule_users_chain_trxs(
                 request.chainId,
                 address
             )
-        return BaseResponse()
+        return parse_obj_as(BaseResponse, {"result": "Successfully saved trxs"})
     except Exception as e:
         logging.exception(e)

@@ -1,4 +1,5 @@
 import logging
+from pydantic import parse_obj_as
 from fastapi import APIRouter
 from typing import List
 
@@ -18,7 +19,7 @@ async def save_func_selectors(
 ):
     try:
         save_function_selectors(function_selectors)
-        return BaseResponse()
+        return parse_obj_as(BaseResponse, {"result": "Successfully saved function selectors"})
     except Exception as e:
         logging.exception(e)
 
@@ -27,6 +28,6 @@ async def save_func_selectors(
 async def save_func_selector(function_selector: FunctionSelector):
     try:
         save_function_selector(function_selector)
-        return BaseResponse()
+        return parse_obj_as(BaseResponse, {"result": "Successfully saved function selector"})
     except Exception as e:
         logging.exception(e)
