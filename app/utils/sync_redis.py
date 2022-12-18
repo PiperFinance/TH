@@ -23,8 +23,10 @@ def get_last_block_number(
     user_address: Address
 ):
     try:
-        return int(cache_client().get(
-            f'{RedisNamespace.LAST_CACHED_BLOCKNUMBER.value}:{chain_id}:{user_address}'))
+        block_number = cache_client().get(
+            f'{RedisNamespace.LAST_CACHED_BLOCKNUMBER.value}:{chain_id}:{user_address}')
+        if block_number:
+            return int(block_number)
     except Exception as e:
         logging.exception(e)
         return 0
