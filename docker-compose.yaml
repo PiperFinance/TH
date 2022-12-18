@@ -24,6 +24,14 @@ services:
       - mongo_db
       - redis_db
 
+networks:
+  redis_db:
+    external:
+      name: redis_db
+  mongo_db:
+    external:
+      name: mongo_db
+
 
 # networks:
 #   default:
