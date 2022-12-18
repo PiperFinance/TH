@@ -9,8 +9,6 @@ services:
       context: ./app
     ports:
       - 23456:23456
-    env_file:
-      - ./.env
     environment:
       - DOMAIN=th.piper.finance
       - PORT=23456
