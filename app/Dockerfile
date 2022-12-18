@@ -15,5 +15,5 @@ COPY ./ ./
 ENV TIMEOUT=3600
 
 
-COPY ./wait /wait
-RUN chmod +x /wait
+# COPY ./wait /wait
+# RUN chmod +x /wait
