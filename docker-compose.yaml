@@ -26,6 +26,8 @@ services:
       - redis_db
 
 networks:
+  default:
+    name: th_default
   redis_db:
     external:
       name: redis_db
