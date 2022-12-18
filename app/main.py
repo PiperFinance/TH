@@ -5,7 +5,8 @@ from pathlib import Path
 
 from configs import redis_config, fastapi_config, mongo_config
 
-load_dotenv(f"{Path(os.getcwd())}/.env")
+if os.path.exists((env_file := f"{Path(os.getcwd())}/.env")):
+    load_dotenv(env_file)
 
 
 DOMAIN = os.getenv("DOMAIN") or "http://localhost:23456"
@@ -26,5 +27,5 @@ async def app_boot():
     await _tt_()
 
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=23456)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=23456)

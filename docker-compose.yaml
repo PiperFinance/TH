@@ -12,6 +12,7 @@ services:
     env_file:
       - ./.env
     environment:
+      - DOMAIN=th.piper.finance
       - PORT=23456
       - REDIS_HOST=redis
       - REDIS_PORT=6379
