@@ -63,7 +63,7 @@ async def get_func_selectors(
     "/get_function_selector",
     response_model=FunctionSelector
 )
-async def get_func_selectors(
+async def get_func_selector(
     hex: HexStr
 ):
     try:
