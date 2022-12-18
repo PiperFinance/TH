@@ -2,13 +2,12 @@ from typing import List
 from pydantic import parse_obj_as
 
 from models import Label
-from .four_bytes_function_selector import get_4bytes_single_function_selector
 from .get_function_selectors import get_function_selector
 
 
 def decode_trx_input_data(input: str) -> List[Label]:
     if input == "deprecated":
-        return
+        return None
 
     labels = []
 
@@ -34,12 +33,4 @@ def decode_trx_input_data(input: str) -> List[Label]:
 
         return labels
 
-    func_sig = get_4bytes_single_function_selector(input[:10])
-
-    if func_sig:
-        return [parse_obj_as(
-            Label,
-            {
-                "title": input[:11],
-                "value": func_sig
-            })]
+    return None
