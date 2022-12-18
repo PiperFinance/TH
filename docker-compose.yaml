@@ -24,9 +24,11 @@ services:
     networks:
       - mongo_db
       - redis_db
+      - default
 
 networks:
   default:
+    driver: bridge
     name: th_default
   redis_db:
     external:
