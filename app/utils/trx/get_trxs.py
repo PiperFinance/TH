@@ -1,27 +1,41 @@
 from pydantic import parse_obj_as
-from typing import List, Dict
+from typing import List, Dict, Union
 
 from models import Trx
 from utils.types import Address, ChainId
 
 
-def get_user_chain_token_trxs_len(
+def get_users_chain_token_trxs_len(
     chain_id: ChainId,
-    address: Address,
+    addresses: Union[List[Address], Address],
 ) -> int:
     client = Trx.mongo_client(chain_id)
-    query = {"userAddress": address}
+    if type(addresses) == list:
+        addrs = []
+        for address in addresses:
+            addrs.append({"userAddress": address})
+        query = {"$or": addrs}
+    else:
+        query = {"userAddress": addresses}
+
     return len(list(client.find(query)))
 
 
-def get_user_chain_token_trxs(
+def get_users_chain_token_trxs(
     chain_id: ChainId,
-    address: Address,
+    addresses: Union[List[Address], Address],
     skip: int = 0,
     limit: int = 0
 ) -> List[Trx]:
+
     client = Trx.mongo_client(chain_id)
-    query = {"userAddress": address}
+    if type(addresses) == list:
+        addrs = []
+        for address in addresses:
+            addrs.append({"userAddress": address})
+        query = {"$or": addrs}
+    else:
+        query = {"userAddress": addresses}
 
     if limit < 1:
         trxs = list(client.find(query).sort("timeStamp", -1))

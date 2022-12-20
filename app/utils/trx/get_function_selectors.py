@@ -1,5 +1,7 @@
-from typing import List
+import logging
+from typing import List, Union, Dict
 from pydantic import parse_obj_as
+
 from models import FunctionSelector
 from utils.types import HexStr
 
@@ -27,6 +29,8 @@ def get_all_function_selectors(
         function_selector_list.append(parse_obj_as(
             FunctionSelector, function_selector))
 
+    return function_selector_list
+
 
 def get_all_function_selectors_len():
     client = FunctionSelector.mongo_client()
@@ -34,22 +38,42 @@ def get_all_function_selectors_len():
 
 
 def get_function_selectors(
-    hexs: List[HexStr],
+    hexs: Union[List[HexStr], HexStr],
 ) -> List[FunctionSelector]:
-    function_selectors = []
 
-    for hex in hexs:
+    if type(hexs) == list:
+        client = FunctionSelector.mongo_client()
+        hs = []
+        for hex in hexs:
+            hs.append({"hex": hex})
+        query = {"$or": hs}
+        function_selector_list = list(client.find(query))
+        if function_selector_list in [None, []]:
+            return
+        function_selectors = []
+        for function_selector in function_selector_list:
+            function_selectors.append(
+                make_function_selector_obj(function_selector))
+        return function_selectors
+    else:
+        return get_function_selector(hexs)
+
+
+def get_function_selector(hex: HexStr):
+    try:
         client = FunctionSelector.mongo_client()
         function_selector = client.find_one({"hex": hex})
         if function_selector:
-            function_selectors.append(parse_obj_as(
-                FunctionSelector, function_selector))
+            return make_function_selector_obj
+    except Exception as e:
+        logging.exception(e)
+        return None
 
-    return function_selectors
 
-
-def get_function_selector(hex: HexStr) -> FunctionSelector:
-    client = FunctionSelector.mongo_client()
-    function_selector = client.find_one({"hex": hex})
-    if function_selector:
-        return parse_obj_as(FunctionSelector, function_selector)
+def make_function_selector_obj(function_selector: Dict):
+    try:
+        return parse_obj_as(
+            FunctionSelector, function_selector)
+    except Exception as e:
+        logging.exception(e)
+        return None

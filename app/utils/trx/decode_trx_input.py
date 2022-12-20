@@ -22,7 +22,6 @@ def decode_trx_input_data(input: str) -> List[Label]:
         starter = 10
 
         for arg, arg_type in func_sig_with_args.args:
-
             labels.append(parse_obj_as(
                 Label,
                 {
