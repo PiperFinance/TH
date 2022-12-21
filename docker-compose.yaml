@@ -15,10 +15,10 @@ services:
       - PORT=23456
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://piperFinance:Piper2022redis:6379
       - MONGO_HOST=mongo
       - MONGO_PORT=27017
-      - MONGO_URL=mongodb://mongo:27017
+      - MONGO_URL=mongodb://piperFinance:Piper2022@mongo:27017
       - API_LIST=./data/api_keys.json
 
     networks:
@@ -37,8 +37,6 @@ networks:
     external:
       name: mongo_db
 
-
 # networks:
 #   default:
 #     driver: bridge
-    
