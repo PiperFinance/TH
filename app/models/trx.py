@@ -34,15 +34,15 @@ class Trx(Chain):
     input: str
     confirmations: str
 
-    def __hash__(self):
-        return hash(self.hash)
+    # def __hash__(self):
+    #     return hash(self.hash)
 
-    def __eq__(self, other_trx):
-        return self.hash == other_trx.hash
+    # def __eq__(self, other_trx):
+    #     return self.hash == other_trx.hash
 
-    def update(self, other_trx):
-        if self == other_trx:
-            self.input = other_trx.input
+    # def update(self, other_trx):
+    #     if self == other_trx:
+    #         self.input = other_trx.input
 
     @classmethod
     def mongo_client(cls, chain_id: int) -> MongoClient:
