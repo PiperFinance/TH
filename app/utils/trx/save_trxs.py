@@ -80,9 +80,14 @@ def create_trxs(
 
     for trx in users_trxs:
         trx["userAddress"] = Web3.toChecksumAddress(address)
-        labels = decode_trx_input_data(trx.get("input"))
+        input, labels = decode_trx_input_data(
+            chain_id,
+            trx.get("hash"),
+            trx.get("input")
+        )
         if labels:
             trx["labels"] = labels
+            trx["input"] = input
         trx["chainId"] = chain_id
         trx["fromAddress"] = trx.get("from")
         trx["timeStamp"] = int(trx.get("timeStamp"))

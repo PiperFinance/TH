@@ -43,8 +43,8 @@ async def _tt_():
     skip = 0
     limit = 100
 
-    save_users_chain_token_trxs(
-        56, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
+    # save_users_chain_token_trxs(
+    #     56, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
 
     # save_users_chain_token_trxs(
     #     1, ["0x7d1F235a2eD3f71143c7eD0f5CB1A40b5b5d1aa6"])

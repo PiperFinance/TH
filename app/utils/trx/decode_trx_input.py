@@ -1,13 +1,21 @@
+import logging
 from typing import List
 from pydantic import parse_obj_as
 
-from models import Label
+from models import Label, Chain
 from .get_function_selectors import get_function_selector
+from utils.types import ChainId
 
 
-def decode_trx_input_data(input: str) -> List[Label]:
+def decode_trx_input_data(
+    chain_id: ChainId,
+    hash: str,
+    input: str
+) -> List[Label]:
     if input == "deprecated":
-        return None
+        input = get_trx_input_from_web3(chain_id, hash)
+        if input == None:
+            return None, None
 
     labels = []
 
@@ -30,6 +38,20 @@ def decode_trx_input_data(input: str) -> List[Label]:
                 }))
             starter += 64
 
-        return labels
+        return input, labels
 
-    return None
+    return None, None
+
+
+def get_trx_input_from_web3(
+    chain_id: ChainId,
+    hash: str
+):
+    try:
+        w3 = Chain(chainId=chain_id).w3
+        web3_trx = w3.eth.get_transaction(hash)
+        if web3_trx:
+            return web3_trx.get("input")
+    except Exception as e:
+        logging.exception(e)
+        return None
