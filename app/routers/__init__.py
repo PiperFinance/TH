@@ -2,20 +2,20 @@ from fastapi import APIRouter
 
 
 from . import (
-    get_func_selectors,
+    get_function_selectors,
     get_trxs,
-    save_func_selectors,
+    save_function_selectors,
     save_trxs
 )
 
 routers = APIRouter()
 
 routers.include_router(
-    save_func_selectors.routes,
+    save_function_selectors.routes,
     tags=["Save Function Selector"])
 
 routers.include_router(
-    get_func_selectors.routes,
+    get_function_selectors.routes,
     tags=["Get Function Selector"])
 
 

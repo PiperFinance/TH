@@ -9,6 +9,14 @@ from utils.sync_redis import cache_last_block_number, get_last_block_number
 from utils.types import Address, ChainId
 
 
+def save_users_chain_token_trxs(
+    chain_id: ChainId,
+    addresses: List[Address]
+):
+    for address in addresses:
+        save_user_chain_token_trxs(chain_id, address)
+
+
 def save_user_chain_token_trxs(
     chain_id: ChainId,
     address: Address

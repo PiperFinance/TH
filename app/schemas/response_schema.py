@@ -16,6 +16,3 @@ class TrxList(BaseResponse):
 
 class FunctionSelectorList(BaseResponse):
     result: Optional[List[FunctionSelector]]
-
-class FunctionSelectorResponse(BaseResponse):
-    result: Optional[FunctionSelector]

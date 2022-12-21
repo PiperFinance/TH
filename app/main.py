@@ -1,13 +1,6 @@
 import os
-import uvicorn
-from dotenv import load_dotenv
-from pathlib import Path
 
 from configs import redis_config, fastapi_config, mongo_config
-
-if os.path.exists((env_file := f"{Path(os.getcwd())}/.env")):
-    load_dotenv(env_file)
-
 
 DOMAIN = os.getenv("DOMAIN") or "http://localhost:23456"
 REDIS_URL = os.getenv("REDIS_URL") or "redis://localhost:6379"

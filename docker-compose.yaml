@@ -36,7 +36,3 @@ networks:
   mongo_db:
     external:
       name: mongo_db
-
-# networks:
-#   default:
-#     driver: bridge

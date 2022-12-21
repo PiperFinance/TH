@@ -1,0 +1,255 @@
+[
+  {
+    "hex": "0xa9059cbb",
+    "text": "transfer",
+    "args": [
+      ["to", "address"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xfa558b71",
+    "text": "transferERC20",
+    "args": [
+      ["token", "address"],
+      ["recipients", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xf242432a",
+    "text": "safeTransferFrom",
+    "args": [
+      ["from", "address"],
+      ["to", "address"],
+      ["id", "uint256"],
+      ["value", "uint256"],
+      ["data", "bytes"]
+    ]
+  },
+  {
+    "hex": "0x23b872dd",
+    "text": "transferFrom",
+    "args": [
+      ["from", "address"],
+      ["to", "address"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x097da1f8",
+    "text": "executeTransactionWithGasRefunder",
+    "args": [
+      ["gasRefunder", "address"],
+      ["data", "bytes"],
+      ["destination", "address"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x095ea7b3",
+    "text": "approve",
+    "args": [
+      ["sender", "address"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x512d7cfd",
+    "text": "batchTransferToken",
+    "args": [
+      ["holders", "address[]"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x5ae401dc",
+    "text": "multicall",
+    "args": [
+      ["deadline", "uint256"],
+      ["data", "bytes[]"]
+    ]
+  },
+  {
+    "hex": "0xac9650d8",
+    "text": "multicall",
+    "args": [["data", "bytes[]"]]
+  },
+  {
+    "hex": "0x59486cd1",
+    "text": "tradeV2",
+    "args": [
+      ["tradeDetails", "tuple[]"],
+      ["aggregatorParam", "tuple[]"],
+      ["isAtomic", "bool"]
+    ]
+  },
+  {
+    "hex": "0xa22cb465",
+    "text": "setApprovalForAll",
+    "args": [
+      ["operator", "address"],
+      ["approved", "bool"]
+    ]
+  },
+  {
+    "hex": "0x0f5287b0",
+    "text": "transferTokens",
+    "args": [
+      ["token", "address"],
+      ["amount", "uint256"],
+      ["recipientChain", "uint16"],
+      ["arbiterFee", "uint256"],
+      ["nonce", "uint32"]
+    ]
+  },
+  {
+    "hex": "0x6a761202",
+    "text": "execTransaction",
+    "args": [
+      ["to", "address"],
+      ["value", "uint256"],
+      ["data", "bytes"],
+      ["operation", "uint8"],
+      ["safeTxGas", "uint256"],
+      ["baseGas", "uint256"],
+      ["gasPrice", "uint256"],
+      ["gasToken", "address"],
+      ["refundReceiver", "address"],
+      ["signatures", "bytes"]
+    ]
+  },
+  {
+    "hex": "0x5f575529",
+    "text": "swap",
+    "args": [
+      ["aggregatorId", "string"],
+      ["tokenFrom", "address"],
+      ["amount", "uint256"],
+      ["data", "bytes"]
+    ]
+  },
+  {
+    "hex": "0x0502b1c5",
+    "text": "unoswap",
+    "args": [
+      ["srcToken", "address"],
+      ["amount", "uint256"],
+      ["minReturn", "uint256"],
+      ["pools", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x7ff36ab5",
+    "text": "swapExactETHForTokens",
+    "args": [
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x8803dbee",
+    "text": "swapTokensForExactTokens",
+    "args": [
+      ["amountOut", "uint256"],
+      ["amountInMax", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x38ed1739",
+    "text": "swapExactTokensForTokens",
+    "args": [
+      ["amountIn", "uint256"],
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x791ac947",
+    "text": "swapExactTokensForETHSupportingFeeOnTransferTokens",
+    "args": [
+      ["amountIn", "uint256"],
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x5c11d795",
+    "text": "swapExactTokensForTokensSupportingFeeOnTransferTokens",
+    "args": [
+      ["amountIn", "uint256"],
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xb6f9de95",
+    "text": "swapExactETHForTokensSupportingFeeOnTransferTokens",
+    "args": [
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x0175b1c4",
+    "text": "anySwapInAuto",
+    "args": [
+      ["txs", "uint256"],
+      ["token", "address"],
+      ["to", "address"],
+      ["amount", "uint256"],
+      ["fromChainID", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xf3fef3a3",
+    "text": "withdraw",
+    "args": [
+      ["to", "address"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xf340fa01",
+    "text": "deposit",
+    "args": [["valAddr", "address"]]
+  },
+  {
+    "hex": "0xb6b55f25",
+    "text": "deposit",
+    "args": [["_amount", "uint256"]]
+  },
+  {
+    "hex": "0xfa2b068f",
+    "text": "mint",
+    "args": [
+      ["creatorContractAddress", "address"],
+      ["claimIndex", "uint256"],
+      ["mintIndex", "uint32"],
+      ["merkleProof", "bytes32[]"],
+      ["mintFor", "address"]
+    ]
+  },
+  {
+    "hex": "0x2917eb39",
+    "text": "burnToken",
+    "args": [
+      ["_name", "string"],
+      ["_amount", "uint256"],
+      ["_correlationId", "string"]
+    ]
+  }
+]
