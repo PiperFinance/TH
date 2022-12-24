@@ -1,6 +1,7 @@
 import os
 
 from configs import redis_config, fastapi_config, mongo_config
+from fastapi.middleware.cors import CORSMiddleware
 
 DOMAIN = os.getenv("DOMAIN") or "http://localhost:23456"
 REDIS_URL = os.getenv("REDIS_URL") or "redis://localhost:6379"
@@ -9,6 +10,15 @@ MONGO_URL = os.getenv("MONGO_URL") or "mongodb://localhost:27017/"
 
 app = fastapi_config.config(DOMAIN)
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def app_boot():
