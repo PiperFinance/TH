@@ -67,11 +67,12 @@ class ArgType(Enum):
         #     case _:
         #         return val
 
-        if self.ADDRESS:
+        if self.value == "address":
             return Web3.toChecksumAddress(f"0x{val[24:]}")
-        if self.INT or self.UINT:
-            return Web3.toInt(val)
-        if self.BYTES:
+        if self.value in ["int", "uint"]:
+            # return Web3.toInt(val)
+            return int(val, 16)
+        if self.value == "bytes":
             return Web3.toBytes(val)
         else:
             return val
@@ -88,11 +89,10 @@ class FunctionSelector(BaseModel):
     args: Optional[List[Arg]]
 
     def dict(self, *a, **kwd):
-        self.args = [(_.title, _.type.value) for _ in self.args]
+        if self.args:
+            self.args = [(_.title, _.type.value) for _ in self.args]
         return super().dict(*a, **kwd)
 
     @classmethod
     def mongo_client(cls):
-        client = function_selector_client(cls.__name__)
-        client.create_index("hex", unique=True)
-        return client
+        return function_selector_client(cls.__name__, "hex")

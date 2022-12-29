@@ -24,7 +24,7 @@ class _Functions:
 
 class RedisNamespace(_Functions, Enum):
     LAST_CACHED_BLOCKNUMBER = 'lbt:'
-    LAST_CACHED_BLOCKNUMBER_WEB3 = "lbw:"
+
 
 async def initialize(url: str) -> bool:
     global _CLIENT

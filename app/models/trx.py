@@ -1,9 +1,23 @@
+from enum import Enum
 from pydantic import BaseModel
 from typing import List, Optional, Union
 
 from . import Chain
+from .token import Token
 from configs.mongo_config import client
 from utils.types import Address, StringBlockNumber, Symbol, Name, Decimal, MongoClient
+
+
+class TrxType(Enum):
+    NORMAL_TRX = "normal"
+    TOKEN_TRX = "token"
+
+    @property
+    def url(self):
+        if self.value == "normal":
+            return "?module=account&action=txlist&apikey="
+        if self.value == "token":
+            return "?module=account&action=tokentx&apikey="
 
 
 class Label(BaseModel):
@@ -14,6 +28,7 @@ class Label(BaseModel):
 class Trx(Chain):
     userAddress: Address
     labels: Optional[List[Label]]
+    token: Optional[Token]
     blockNumber: StringBlockNumber
     timeStamp: int
     hash: str
@@ -36,9 +51,4 @@ class Trx(Chain):
 
     @classmethod
     def mongo_client(cls, chain_id: int) -> MongoClient:
-        c = client(cls.__name__, chain_id)
-        c.create_index(
-            "hash",
-            unique=True
-        )
-        return c
+        return client(cls.__name__, chain_id, "hash")

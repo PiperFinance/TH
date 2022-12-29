@@ -23,7 +23,8 @@ def decode_trx_input_data(
 
     if func_sig_with_args:
         labels.append(Label(**{
-            "title": func_sig_with_args.hex,
+            # "title": func_sig_with_args.hex,
+            "title": "function",
             "value": func_sig_with_args.text
         }))
 

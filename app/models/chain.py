@@ -1,5 +1,5 @@
 from web3 import Web3
-from typing import List
+from typing import List, Dict
 from pydantic import BaseModel
 
 from configs.constant_config import constants
@@ -27,5 +27,5 @@ class Chain(BaseModel):
         return Web3(Web3.HTTPProvider(rpc))
 
     @classmethod
-    def mongo_client(cls, chain_id: ChainId) -> MongoClient:
+    def mongo_client(cls, chain_id: ChainId, index: str) -> MongoClient:
         raise NotImplementedError

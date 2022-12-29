@@ -1,7 +1,10 @@
 import os
+import logging
 
 from configs import redis_config, fastapi_config, mongo_config
 from fastapi.middleware.cors import CORSMiddleware
+
+logging.basicConfig(level=logging.INFO)
 
 DOMAIN = os.getenv("DOMAIN") or "http://localhost:23456"
 REDIS_URL = os.getenv("REDIS_URL") or "redis://localhost:6379"
@@ -28,7 +31,3 @@ async def app_boot():
     # from test_functions import _tt_
 
     # await _tt_()
-
-
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="0.0.0.0", port=23456)

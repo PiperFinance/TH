@@ -18,18 +18,28 @@ def initialize(url: str) -> bool:
 
 def client(
     class_name: str,
-    chain_id: int
+    chain_id: int,
+    index: str = None
 ):
     global _CLIENT
+    if _CLIENT[str(chain_id)][class_name] != None:
+        return _CLIENT[str(chain_id)][class_name]
     db = _CLIENT[str(chain_id)]
     col = db[class_name]
+    if index != None:
+        col.create_index(index, unique=True)
     return col
 
 
 def function_selector_client(
     class_name: str,
+    index: str = None
 ):
     global _CLIENT
+    if _CLIENT[class_name][class_name] != None:
+        return _CLIENT[class_name][class_name]
     db = _CLIENT[class_name]
     col = db[class_name]
+    if index != None:
+        col.create_index(index, unique=True)
     return col

@@ -7,9 +7,18 @@ from utils.types import Address, ChainId
 class FunctionSelectorSchema(BaseModel):
     hex: str
     text: str
-    args: List[List[str]]
+    args: Optional[List[List[str]]]
+
+
+class FunctionSelectorsSchema(BaseModel):
+    functionSelectors: List[FunctionSelectorSchema]
+
+
+class UsersChainData(BaseModel):
+    chainId: ChainId
+    userAddresses: List[Address]
 
 
 class UsersData(BaseModel):
-    chainId: ChainId
+    chainIds: List[ChainId]
     userAddresses: List[Address]

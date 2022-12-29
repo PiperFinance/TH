@@ -6,3 +6,4 @@ odmantic
 requests 
 web3 
 python-dotenv 
+numpy

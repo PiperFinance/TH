@@ -64,7 +64,7 @@ def get_function_selector(hex: HexStr):
         client = FunctionSelector.mongo_client()
         function_selector = client.find_one({"hex": hex})
         if function_selector:
-            return make_function_selector_obj
+            return make_function_selector_obj(function_selector)
     except Exception as e:
         logging.exception(e)
         return None

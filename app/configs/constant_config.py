@@ -16,6 +16,20 @@ chains = {}
 for chain in _chains:
     chains[chain.get("id")] = chain
 
+
+_tokens = requests.get(
+    "https://raw.githubusercontent.com/PiperFinance/CD/main/tokens/outVerified/all_tokens.json")
+_tokens = _tokens.json()
+
+tokens = {}
+
+for token_checksum, token in _tokens.items():
+    tokens[int(token_checksum)] = token
+
+
+for chain in _chains:
+    chains[chain.get("id")] = chain
+
 api_key_path = os.getenv(
     "API_LIST") or f"{Path(os.getcwd())}/data/api_keys.json"
 
@@ -37,6 +51,7 @@ function_selectors = list(_function_selectors)
 
 class Constants(BaseConfig):
     chains: Dict[ChainId, Dict] = chains
+    tokens: Dict[int, Dict] = tokens
     api_keys: Dict[ChainId, List] = api_keys
     function_selectors: List[Dict] = function_selectors
 
