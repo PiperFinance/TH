@@ -6,10 +6,10 @@ async def _tt_():
     from configs.redis_config import cache_client
     from utils.trx.decode_trx_input import decode_trx_input_data
 
-    # keys = ["lbt:", "fus:", "lap:"]
-    # for key_pattern in keys:
-    #     for key in cache_client().keys(f"{key_pattern}*"):
-    #         cache_client().delete(key)
+    # keys = cache_client().keys("*")
+    # cache_client().delete(*keys)
+
+    # Trx.mongo_client(10).drop()
 
     # t1 = Trx.mongo_client(1)
     # t2 = Trx.mongo_client(250)

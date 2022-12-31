@@ -41,7 +41,7 @@ def decode_trx_input_data(
 
         return input, labels
 
-    return None, None
+    return input, None
 
 
 def get_trx_input_from_web3(

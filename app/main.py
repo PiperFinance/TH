@@ -1,8 +1,8 @@
 import os
 import logging
+from fastapi.middleware.cors import CORSMiddleware
 
 from configs import redis_config, fastapi_config, mongo_config
-from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(level=logging.INFO)
 
@@ -22,6 +22,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.on_event("startup")
 async def app_boot():

@@ -11,7 +11,7 @@ class Chain(BaseModel):
 
     @staticmethod
     def supported_chains() -> List[ChainId]:
-        return [250, 1, 3, 4, 5, 10, 42, 137, 42161, 42220, 80001, 56, 100, 1284, 43114, 1313161554]
+        return [250, 1, 10, 137, 42161, 42220, 56, 100, 1284, 43114, 1313161554]
 
     @property
     def url(self) -> Url:

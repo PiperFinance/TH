@@ -137,7 +137,7 @@ def create_trxs(
             trx.get("hash"),
             trx.get("input")
         )
-        if labels:
+        if input:
             trx["labels"] = labels
             trx["input"] = input
         token = get_trx_token(
