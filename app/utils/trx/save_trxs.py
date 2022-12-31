@@ -1,5 +1,6 @@
 import requests
 import logging
+from pymongo import errors
 from web3 import Web3
 from zlib import crc32
 from pydantic import parse_obj_as
@@ -189,5 +190,6 @@ def insert_trxs(
                 trx.get("blockNumber")
             )
         except Exception as e:
+            # except errors.DuplicateKeyError:
             logging.exception(e)
             continue
