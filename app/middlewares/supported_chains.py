@@ -1,9 +1,11 @@
 import time
+from typing import List
 from fastapi import FastAPI, Request
 
 from models import Chain
 from utils.types import ChainId
 from errors.custom_error import Errors
+
 
 def add_middlewares(app: FastAPI):
 
@@ -17,7 +19,11 @@ def add_middlewares(app: FastAPI):
     return app
 
 
-
 def check_chain(chain_id: ChainId):
     if chain_id not in Chain.supported_chains():
         raise Errors.ChainIdNotSupported
+
+
+def check_chains(chain_ids: List[ChainId]):
+    for chain_id in chain_ids:
+        check_chain(chain_id)

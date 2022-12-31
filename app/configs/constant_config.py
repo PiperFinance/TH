@@ -27,9 +27,6 @@ for token_checksum, token in _tokens.items():
     tokens[int(token_checksum)] = token
 
 
-for chain in _chains:
-    chains[chain.get("id")] = chain
-
 api_key_path = os.getenv(
     "API_LIST") or f"{Path(os.getcwd())}/data/api_keys.json"
 

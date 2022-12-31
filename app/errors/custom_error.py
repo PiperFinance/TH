@@ -13,7 +13,7 @@ class Errors:
             return f'{self.__class__.__name__}-{self.msg}'
 
     class ChainIdNotSupported(BaseException):
-        msg = "This Network Is not Supported"
+        msg = "Network not Supported"
         status_code = 40410
 
     @property

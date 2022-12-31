@@ -1,6 +1,7 @@
 import logging
 from fastapi import APIRouter
 
+from middlewares.supported_chains import check_chain, check_chains
 from utils.trx.save_trxs import (
     save_users_chain_token_trxs,
     save_users_token_trxs
@@ -15,6 +16,7 @@ routes = APIRouter()
 async def save_users_chain_trxs(
     request: UsersChainData
 ):
+    check_chain(request.chainId)
     try:
         save_users_chain_token_trxs(
             request.chainId,
@@ -29,6 +31,7 @@ async def save_users_chain_trxs(
 async def save_users_trxs(
     request: UsersData
 ):
+    check_chains(request.chainIds)
     try:
         save_users_token_trxs(
             request.chainIds,
