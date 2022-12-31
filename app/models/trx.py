@@ -5,7 +5,7 @@ from typing import List, Optional, Union
 from . import Chain
 from .token import Token
 from configs.mongo_config import client
-from utils.types import Address, StringBlockNumber, Symbol, Name, Decimal, MongoClient
+from utils.types import Address, StringBlockNumber, MongoClient
 
 
 class TrxType(Enum):
@@ -35,12 +35,9 @@ class Trx(Chain):
     nonce: str
     blockHash: str
     fromAddress: Address
-    contractAddress: Address
+    contractAddress: Optional[str]
     to: Address
     value: str
-    tokenName: Name
-    tokenSymbol: Symbol
-    tokenDecimal: Decimal
     transactionIndex: str
     gas: str
     gasPrice: str
@@ -48,6 +45,8 @@ class Trx(Chain):
     cumulativeGasUsed: str
     input: str
     confirmations: str
+    isError: Optional[str]
+    txreceipt_status: Optional[str]
 
     @classmethod
     def mongo_client(cls, chain_id: int) -> MongoClient:

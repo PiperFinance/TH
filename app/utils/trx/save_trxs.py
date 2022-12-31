@@ -31,63 +31,35 @@ def save_users_chain_token_trxs(
         save_user_chain_token_trxs(chain_id, address)
 
 
-# def save_user_chain_token_trxs(
-#     chain_id: ChainId,
-#     address: Address
-# ):
-#     for trx_type in TrxType:
-#         start_block = get_last_block_number(chain_id, address, trx_type.value)
-
-#         trx_url = trx_type.url
-
-#         trxs = get_user_chain_token_trxs(
-#             chain_id,
-#             address,
-#             trx_url,
-#             start_block
-#         )
-#         if trxs in [None, []]:
-#             return
-
-#         trxs = create_trxs(
-#             chain_id,
-#             address,
-#             trxs
-#         )
-#         insert_trxs(
-#             chain_id,
-#             trxs,
-#             trx_type.value
-#         )
-
 def save_user_chain_token_trxs(
     chain_id: ChainId,
     address: Address
 ):
-    start_block = get_last_block_number(
-        chain_id, address, TrxType.TOKEN_TRX.value)
+    for trx_type in TrxType:
+        start_block = get_last_block_number(chain_id, address, trx_type.value)
 
-    trx_url = TrxType.TOKEN_TRX.url
+        trx_url = trx_type.url
 
-    trxs = get_user_chain_token_trxs(
-        chain_id,
-        address,
-        trx_url,
-        start_block
-    )
-    if trxs in [None, []]:
-        return
+        trxs = get_user_chain_token_trxs(
+            chain_id,
+            address,
+            trx_url,
+            start_block
+        )
+        if trxs in [None, []]:
+            return
 
-    trxs = create_trxs(
-        chain_id,
-        address,
-        trxs
-    )
-    insert_trxs(
-        chain_id,
-        trxs,
-        TrxType.TOKEN_TRX.value
-    )
+        trxs = create_trxs(
+            chain_id,
+            address,
+            trxs,
+            trx_type.value
+        )
+        insert_trxs(
+            chain_id,
+            trxs,
+            trx_type.value
+        )
 
 
 def get_user_chain_token_trxs(
@@ -123,7 +95,8 @@ def get_user_chain_token_trxs(
 def create_trxs(
         chain_id: ChainId,
         address: Address,
-        users_trxs: List[Dict]
+        users_trxs: List[Dict],
+        trx_type: str
 ) -> List[Trx]:
     trxs = []
 
@@ -132,6 +105,18 @@ def create_trxs(
         if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
             trx["contractAddress"] = Web3.toChecksumAddress(
                 trx.get("contractAddress"))
+            if trx_type == TrxType.TOKEN_TRX.value:
+                token = get_trx_token(
+                    chain_id,
+                    trx.get("contractAddress"),
+                    trx.get("userAddress"),
+                    trx.get("tokenName"),
+                    trx.get("tokenSymbol"),
+                    trx.get("tokenDecimal")
+                )
+                if token:
+                    trx["token"] = token
+
         input, labels = decode_trx_input_data(
             chain_id,
             trx.get("hash"),
@@ -140,13 +125,7 @@ def create_trxs(
         if input:
             trx["labels"] = labels
             trx["input"] = input
-        token = get_trx_token(
-            chain_id,
-            trx.get("contractAddress"),
-            trx.get("userAddress")
-        )
-        if token:
-            trx["token"] = token
+
         # usd_price = get_usd_price(chain_id)
         # if usd_price:
         #     trx["gas"] = calculate_gas(trx.get("gas"), usd_price)

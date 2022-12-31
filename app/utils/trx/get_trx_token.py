@@ -15,17 +15,26 @@ from utils.types import ChainId, Address
 def get_trx_token(
     chain_id: ChainId,
     token_address: Address,
-    user_address: Address
+    user_address: Address,
+    token_name: str,
+    token_symbol: str,
+    token_decimal: str
 ):
     tokens = constants.tokens
     token_checksum = crc32(
         "-".join([token_address.lower(), str(chain_id)]).encode())
-    # logging.info(
-    #     f"----------------------------------> {token_address}: {token_checksum}")
 
     token = tokens.get(token_checksum)
     if not token:
-        return None
+        token = {
+            "detail": {
+                "chainId": chain_id,
+                "address": token_address,
+                "name": token_name,
+                "symbol": token_symbol,
+                "decimals": int(token_decimal)
+            }
+        }
 
     token = parse_obj_as(Token, token)
     # balance = get_token_balance(
