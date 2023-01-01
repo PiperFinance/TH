@@ -87,8 +87,7 @@ def get_user_chain_token_trxs(
             res = res.json()
             if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
                 return res.get("result")
-        except Exception as e:
-            logging.exception(f"{e} -> API Key didn't work.")
+        except requests.exceptions.JSONDecodeError:
             continue
 
 
@@ -168,7 +167,5 @@ def insert_trxs(
                 trx_type,
                 trx.get("blockNumber")
             )
-        except Exception as e:
-            # except errors.DuplicateKeyError:
-            logging.exception(e)
+        except errors.DuplicateKeyError:
             continue

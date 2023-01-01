@@ -1,4 +1,5 @@
 import logging
+from pymongo import errors
 from pydantic import parse_obj_as
 from typing import List
 
@@ -48,5 +49,5 @@ def insert_function_selector(
     try:
         function_selector = function_selector.dict()
         client.insert_one(function_selector)
-    except Exception as e:
-        logging.exception(e)
+    except errors.DuplicateKeyError:
+        return
