@@ -95,4 +95,6 @@ class FunctionSelector(BaseModel):
 
     @classmethod
     def mongo_client(cls):
-        return function_selector_client(cls.__name__, "hex")
+        c = function_selector_client(cls.__name__)
+        c.create_index("hex", unique=True)
+        return c

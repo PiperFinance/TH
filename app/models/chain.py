@@ -27,5 +27,5 @@ class Chain(BaseModel):
         return Web3(Web3.HTTPProvider(rpc))
 
     @classmethod
-    def mongo_client(cls, chain_id: ChainId, index: str) -> MongoClient:
+    def mongo_client(cls, chain_id: ChainId) -> MongoClient:
         raise NotImplementedError
