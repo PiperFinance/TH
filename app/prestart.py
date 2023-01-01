@@ -20,8 +20,8 @@ async def intialize():
     await redis_config.initialize(REDIS_URL)
     redis_config.isConnected()
     mongo_config.initialize(MONGO_URL)
-    flush_redis()
-    flush_mongo()
+    # flush_redis()
+    # flush_mongo()
     save_first_function_selectors()
 
 try:
