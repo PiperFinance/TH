@@ -68,12 +68,20 @@ class ArgType(Enum):
         #         return val
 
         if self.value == "address":
-            return Web3.toChecksumAddress(f"0x{val[24:]}")
+            try:
+                return Web3.toChecksumAddress(f"0x{val[24:]}")
+            except:
+                return val
         if self.value in ["int", "uint"]:
-            # return Web3.toInt(val)
-            return int(val, 16)
+            try:
+                return int(val, 16)
+            except:
+                return val
         if self.value == "bytes":
-            return bytes.fromhex(val)
+            try:
+                return bytes.fromhex(val)
+            except:
+                return val
         else:
             return val
 
