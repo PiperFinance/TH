@@ -73,7 +73,7 @@ class ArgType(Enum):
             # return Web3.toInt(val)
             return int(val, 16)
         if self.value == "bytes":
-            return Web3.toBytes(val)
+            return bytes.fromhex(val)
         else:
             return val
 
