@@ -31,13 +31,17 @@ def decode_trx_input_data(
         starter = 10
 
         for arg, arg_type in func_sig_with_args.args:
-            labels.append(parse_obj_as(
-                Label,
-                {
-                    "title": arg,
-                    "value": arg_type.parse(input[starter: (starter + 64)])
-                }))
-            starter += 64
+            try:
+                labels.append(parse_obj_as(
+                    Label,
+                    {
+                        "title": arg,
+                        "value": arg_type.parse(input[starter: (starter + 64)])
+                    }))
+                starter += 64
+            except Exception as e:
+                logging.exception(
+                    f'{e}-------------------------------> {arg} - {arg_type} - {hash} - {chain_id}')
 
         return input, labels
 
