@@ -1,4 +1,5 @@
 import logging
+import requests
 from typing import List
 from pydantic import parse_obj_as
 
@@ -12,7 +13,7 @@ def decode_trx_input_data(
     hash: str,
     input: str
 ) -> List[Label]:
-    if input == "deprecated":
+    if input in ["deprecated", "0x", ""]:
         input = get_trx_input_from_web3(chain_id, hash)
         if input == None:
             return None, None
@@ -57,6 +58,6 @@ def get_trx_input_from_web3(
         web3_trx = w3.eth.get_transaction(hash)
         if web3_trx:
             return web3_trx.get("input")
-    except Exception as e:
-        logging.exception(e)
+    # except Exception as e:
+    except requests.exceptions.HTTPError:
         return None

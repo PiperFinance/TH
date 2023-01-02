@@ -1,4 +1,5 @@
 import re
+import logging
 from enum import Enum
 from web3 import Web3
 from pydantic import BaseModel
@@ -28,32 +29,32 @@ class ArgType(Enum):
         int_array_like_regex = re.compile(r"^int[0-9]*\[\]$")
         int_match = int_array_like_regex.match(value)
         if int_match is not None:
-            return "int[]"
+            return ArgType.INT_LIST.value
 
         uint_array_like_regex = re.compile(r'^uint[0-9]*\[\]$')
         uint_match = uint_array_like_regex.match(value)
         if uint_match is not None:
-            return "uint[]"
+            return ArgType.UINT_LIST.value
 
         int_like_regex = re.compile(r'^int[0-9]')
         int_match = int_like_regex.match(value)
         if int_match is not None:
-            return "int"
+            return ArgType.INT.value
 
         uint_like_regex = re.compile(r'^uint[0-9]')
         uint_match = uint_like_regex.match(value)
         if uint_match is not None:
-            return "uint"
+            return ArgType.UINT.value
 
         bytes_array_like_regex = re.compile(r"^bytes[0-9]*\[\]$")
         bytes_match = bytes_array_like_regex.match(value)
         if bytes_match is not None:
-            return "bytes[]"
+            return ArgType.BYTES_LIST.value
 
         bytes_like_regex = re.compile(r'^bytes[0-9]')
         bytes_match = bytes_like_regex.match(value)
         if bytes_match is not None:
-            return "bytes"
+            return ArgType.BYTES.value
 
         else:
             return value
@@ -67,20 +68,23 @@ class ArgType(Enum):
         #     case _:
         #         return val
 
-        if self.value == "address":
+        if self.value == ArgType.ADDRESS.value:
             try:
                 return Web3.toChecksumAddress(f"0x{val[24:]}")
-            except:
+            except Exception as e:
+                logging.exception(e)
                 return val
-        if self.value in ["int", "uint"]:
+        if self.value in [ArgType.INT.value, ArgType.UINT.value]:
             try:
                 return int(val, 16)
-            except:
+            except Exception as e:
+                logging.exception(e)
                 return val
-        if self.value == "bytes":
+        if self.value == ArgType.BYTES.value:
             try:
                 return bytes.fromhex(val)
-            except:
+            except Exception as e:
+                logging.exception(e)
                 return val
         else:
             return val
