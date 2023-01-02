@@ -73,19 +73,19 @@ class ArgType(Enum):
                 return Web3.toChecksumAddress(f"0x{val[24:]}")
             except Exception as e:
                 logging.exception(e)
-                return val
+                return str(val)
         if self.value in [ArgType.INT.value, ArgType.UINT.value]:
             try:
                 return str(int(val, 16))
             except Exception as e:
                 logging.exception(e)
-                return val
+                return str(val)
         if self.value == ArgType.BYTES.value:
             try:
-                return bytes.fromhex(val)
+                return str(bytes.fromhex(val))
             except Exception as e:
                 logging.exception(e)
-                return val
+                return str(val)
         # if self.value == ArgType.STRING.value:
         #     try:
         #         return bytes.fromhex(val).decode('utf-8')
@@ -93,7 +93,7 @@ class ArgType(Enum):
         #         logging.exception(e)
         #         return val
         else:
-            return val
+            return str(val)
 
 
 class Arg(NamedTuple):
