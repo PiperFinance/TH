@@ -76,7 +76,7 @@ class ArgType(Enum):
                 return val
         if self.value in [ArgType.INT.value, ArgType.UINT.value]:
             try:
-                return int(val, 16)
+                return str(int(val, 16))
             except Exception as e:
                 logging.exception(e)
                 return val
