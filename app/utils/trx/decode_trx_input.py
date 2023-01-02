@@ -42,7 +42,7 @@ def decode_trx_input_data(
                 starter += 64
             except Exception as e:
                 logging.exception(
-                    f'{e}-------------------------------> {arg} - {arg_type} - {hash} - {chain_id}')
+                    f'{e}-------------------------------> {arg}: {input[starter: (starter + 64)]} - {arg_type} - {hash} - {chain_id}')
 
         return input, labels
 
