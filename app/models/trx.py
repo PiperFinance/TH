@@ -1,6 +1,6 @@
 from enum import Enum
 from pydantic import BaseModel
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Any
 
 from . import Chain
 from .token import Token
@@ -22,7 +22,11 @@ class TrxType(Enum):
 
 class Label(BaseModel):
     title: str
-    value: Union[str, int]
+    value: Any
+    # value: Union[str, int, bytes, bytearray, List]
+
+    class Config:
+        arbitrary_types_allowed = True
 
 
 class Trx(Chain):

@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 from configs import redis_config, mongo_config
-from flush_dbs import flush_redis, flush_mongo
 from save_function_selectors import save_first_function_selectors
 
 if os.path.exists((env_file := f"{Path(os.getcwd())}/.env")):
@@ -20,8 +19,6 @@ async def intialize():
     await redis_config.initialize(REDIS_URL)
     redis_config.isConnected()
     mongo_config.initialize(MONGO_URL)
-    # flush_redis()
-    # flush_mongo()
     save_first_function_selectors()
 
 try:
