@@ -86,12 +86,12 @@ class ArgType(Enum):
             except Exception as e:
                 logging.exception(e)
                 return val
-        if self.value == ArgType.STRING.value:
-            try:
-                return bytes.fromhex(val).decode('utf-8')
-            except Exception as e:
-                logging.exception(e)
-                return val
+        # if self.value == ArgType.STRING.value:
+        #     try:
+        #         return bytes.fromhex(val).decode('utf-8')
+        #     except Exception as e:
+        #         logging.exception(e)
+        #         return val
         else:
             return val
 
