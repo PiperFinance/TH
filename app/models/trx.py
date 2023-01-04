@@ -52,9 +52,6 @@ class Trx(Chain):
     isError: Optional[str]
     txreceipt_status: Optional[str]
 
-    def __hash__(self):
-        return hash(self.hash)
-
     @classmethod
     def mongo_client(cls, chain_id: int) -> MongoClient:
         c = client(cls.__name__, chain_id)

@@ -97,7 +97,7 @@ def create_trxs(
         users_trxs: List[Dict],
         trx_type: str
 ) -> List[Trx]:
-    trxs = set()
+    trxs = []
 
     created_trxs_tokens = dict()
     for trx in users_trxs:
@@ -140,9 +140,9 @@ def create_trxs(
         trx["fromAddress"] = trx.get("from")
         trx["timeStamp"] = int(trx.get("timeStamp"))
         trx_obj = parse_obj_as(Trx, trx)
-        trxs.add(trx_obj.dict())
+        trxs.apend(trx_obj.dict())
 
-    return list(trxs)
+    return trxs
 
 
 def create_trx_token(
