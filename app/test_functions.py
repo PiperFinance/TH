@@ -50,7 +50,7 @@ async def _tt_():
     #     56, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
 
     # save_users_chain_token_trxs(
-    #     1, ["0x7d1F235a2eD3f71143c7eD0f5CB1A40b5b5d1aa6"])
+    #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
 
     # get_users_chain_token_trxs(
     # 1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"], skip, limit)

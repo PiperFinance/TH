@@ -32,7 +32,7 @@ class Label(BaseModel):
 class Trx(Chain):
     userAddress: Address
     labels: Optional[List[Label]]
-    token: Optional[Token]
+    token: Optional[Union[Token, List[Token]]]
     blockNumber: StringBlockNumber
     timeStamp: int
     hash: str

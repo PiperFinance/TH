@@ -87,7 +87,7 @@ def get_user_chain_token_trxs(
             res = res.json()
             if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
                 return res.get("result")
-        except requests.exceptions.JSONDecodeError:
+        except requests.exceptions.JSONDecodeError or requests.exceptions.SSLError:
             continue
 
 
@@ -97,24 +97,28 @@ def create_trxs(
         users_trxs: List[Dict],
         trx_type: str
 ) -> List[Trx]:
-    trxs = []
+    trxs = set()
 
+    created_trxs_tokens = dict()
     for trx in users_trxs:
         trx["userAddress"] = Web3.toChecksumAddress(address)
         if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
             trx["contractAddress"] = Web3.toChecksumAddress(
                 trx.get("contractAddress"))
             if trx_type == TrxType.TOKEN_TRX.value:
-                token = get_trx_token(
-                    chain_id,
-                    trx.get("contractAddress"),
-                    trx.get("userAddress"),
-                    trx.get("tokenName"),
-                    trx.get("tokenSymbol"),
-                    trx.get("tokenDecimal")
-                )
-                if token:
-                    trx["token"] = token
+
+                if trx.get("hash") in created_trxs_tokens.keys():
+                    same_trxs_tokens = created_trxs_tokens.get(trx.get("hash"))
+                    token = create_trx_token(chain_id, trx)
+                    if token:
+                        created_trxs_tokens[trx.get("hash")].append(token)
+                        same_trxs_tokens.append(token)
+                    trx["token"] = same_trxs_tokens
+                else:
+                    token = create_trx_token(chain_id, trx)
+                    if token:
+                        created_trxs_tokens[trx.get("hash")] = [token]
+                        trx["token"] = token
 
         input, labels = decode_trx_input_data(
             chain_id,
@@ -136,9 +140,24 @@ def create_trxs(
         trx["fromAddress"] = trx.get("from")
         trx["timeStamp"] = int(trx.get("timeStamp"))
         trx_obj = parse_obj_as(Trx, trx)
-        trxs.append(trx_obj.dict())
+        trxs.add(trx_obj.dict())
 
-    return trxs
+    return list(trxs)
+
+
+def create_trx_token(
+    chain_id: ChainId,
+    trx: Dict,
+):
+    token = get_trx_token(
+        chain_id,
+        trx.get("contractAddress"),
+        trx.get("userAddress"),
+        trx.get("tokenName"),
+        trx.get("tokenSymbol"),
+        trx.get("tokenDecimal")
+    )
+    return token
 
 
 def get_usd_price(chain_id: ChainId):
