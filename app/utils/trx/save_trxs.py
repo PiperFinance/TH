@@ -140,7 +140,7 @@ def create_trxs(
         trx["fromAddress"] = trx.get("from")
         trx["timeStamp"] = int(trx.get("timeStamp"))
         trx_obj = parse_obj_as(Trx, trx)
-        trxs.apend(trx_obj.dict())
+        trxs.append(trx_obj.dict())
 
     return trxs
 
