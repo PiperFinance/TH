@@ -108,14 +108,13 @@ def create_trxs(
                 if trx.get("hash") in created_trxs_tokens.keys():
                     same_trxs_tokens = created_trxs_tokens.get(trx.get("hash"))
                     token = create_trx_token(chain_id, trx)
-                    if token:
-                        created_trxs_tokens[trx.get("hash")] = created_trxs_tokens.get(
-                            trx.get("hash")).append(token)
+                    if token != None:
                         same_trxs_tokens.append(token)
+                        created_trxs_tokens[trx.get("hash")] = same_trxs_tokens
                     trx["token"] = same_trxs_tokens
                 else:
                     token = create_trx_token(chain_id, trx)
-                    if token:
+                    if token != None:
                         created_trxs_tokens[trx.get("hash")] = [token]
                         trx["token"] = token
 
