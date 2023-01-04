@@ -97,32 +97,26 @@ def create_trxs(
         users_trxs: List[Dict],
         trx_type: str
 ) -> List[Trx]:
-    trxs = []
-
-    created_trxs = dict()
+    trxs = dict()
+    created_trxs_tokens = dict()
     for trx in users_trxs:
         trx["userAddress"] = Web3.toChecksumAddress(address)
         if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
             trx["contractAddress"] = Web3.toChecksumAddress(
                 trx.get("contractAddress"))
             if trx_type == TrxType.TOKEN_TRX.value:
-
-                if trx.get("hash") in created_trxs.keys():
-                    trxs.remove(created_trxs.get(trx.get("hash")).get("trx"))
-                    same_trxs_tokens = created_trxs.get(
-                        trx.get("hash")).get("token")
+                if trx.get("hash") in created_trxs_tokens.keys():
+                    same_trxs_tokens = created_trxs_tokens.get(trx.get("hash"))
                     token = create_trx_token(chain_id, trx)
                     if token:
-                        created_trxs[trx.get("hash")]["token"].append(token)
+                        created_trxs_tokens[trx.get("hash")] = created_trxs_tokens.get(
+                            trx.get("hash")).append(token)
                         same_trxs_tokens.append(token)
                     trx["token"] = same_trxs_tokens
                 else:
                     token = create_trx_token(chain_id, trx)
                     if token:
-                        created_trxs[trx.get("hash")] = {
-                            "trx": trx,
-                            "token": [token]
-                        }
+                        created_trxs_tokens[trx.get("hash")] = [token]
                         trx["token"] = token
 
         input, labels = decode_trx_input_data(
@@ -145,9 +139,9 @@ def create_trxs(
         trx["fromAddress"] = trx.get("from")
         trx["timeStamp"] = int(trx.get("timeStamp"))
         trx_obj = parse_obj_as(Trx, trx)
-        trxs.append(trx_obj.dict())
+        trxs[trx_obj.hash] = trx_obj.dict()
 
-    return trxs
+    return list(trxs.values())
 
 
 def create_trx_token(
