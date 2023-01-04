@@ -99,7 +99,7 @@ def create_trxs(
 ) -> List[Trx]:
     trxs = []
 
-    created_trxs_tokens = dict()
+    created_trxs = dict()
     for trx in users_trxs:
         trx["userAddress"] = Web3.toChecksumAddress(address)
         if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
@@ -107,17 +107,22 @@ def create_trxs(
                 trx.get("contractAddress"))
             if trx_type == TrxType.TOKEN_TRX.value:
 
-                if trx.get("hash") in created_trxs_tokens.keys():
-                    same_trxs_tokens = created_trxs_tokens.get(trx.get("hash"))
+                if trx.get("hash") in created_trxs.keys():
+                    trxs.remove(created_trxs.get(trx.get("hash")).get("trx"))
+                    same_trxs_tokens = created_trxs.get(
+                        trx.get("hash")).get("token")
                     token = create_trx_token(chain_id, trx)
                     if token:
-                        created_trxs_tokens[trx.get("hash")].append(token)
+                        created_trxs[trx.get("hash")]["token"].append(token)
                         same_trxs_tokens.append(token)
                     trx["token"] = same_trxs_tokens
                 else:
                     token = create_trx_token(chain_id, trx)
                     if token:
-                        created_trxs_tokens[trx.get("hash")] = [token]
+                        created_trxs[trx.get("hash")] = {
+                            "trx": trx,
+                            "token": [token]
+                        }
                         trx["token"] = token
 
         input, labels = decode_trx_input_data(
