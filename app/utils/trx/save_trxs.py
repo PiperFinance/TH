@@ -115,6 +115,7 @@ def create_trxs(
                     trx["tokens"] = same_trxs_tokens
                     logging.info(
                         f"trx: {trx.get('hash')} in chain: {chain_id} has more than one token.")
+                    logging.info(same_trxs_tokens)
                 else:
                     token = create_trx_token(chain_id, trx)
                     if token != None:
@@ -142,6 +143,8 @@ def create_trxs(
         trx["timeStamp"] = int(trx.get("timeStamp"))
         trx_obj = parse_obj_as(Trx, trx)
         trxs[trx_obj.hash] = trx_obj.dict()
+        if trx_obj.tokens and len(trx_obj.tokens) > 1:
+            logging.info("multi tokens saved")
 
     return list(trxs.values())
 
