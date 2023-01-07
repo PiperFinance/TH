@@ -36,7 +36,8 @@ def save_user_chain_token_trxs(
     address: Address
 ):
     for trx_type in TrxType:
-        start_block = get_last_block_number(chain_id, address, trx_type.value)
+        start_block = 0
+        # start_block = get_last_block_number(chain_id, address, trx_type.value)
 
         trx_url = trx_type.url
 
@@ -112,6 +113,8 @@ def create_trxs(
                         same_trxs_tokens.append(token)
                         created_trxs_tokens[trx.get("hash")] = same_trxs_tokens
                     trx["tokens"] = same_trxs_tokens
+                    logging.info(
+                        f"trx: {trx.get('hash')} in chain: {chain_id} has more than one token.")
                 else:
                     token = create_trx_token(chain_id, trx)
                     if token != None:

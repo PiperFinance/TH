@@ -1,3 +1,4 @@
+import logging
 from pydantic import parse_obj_as
 from typing import List, Dict, Union
 
@@ -82,5 +83,9 @@ def get_users_chain_token_trxs(
 def create_trx_objects(trxs: List[Dict]):
     trx_objs = []
     for trx in trxs:
+        if trx.get("tokens") and len(trx.get('tokens')) > 1:
+            logging.info(
+                f"trx: {trx.get('hash')} in chain {trx.get('chainId')} has more than one tokens")
+            logging.info(trx.get("tokens"))
         trx_objs.append(parse_obj_as(Trx, trx))
     return trx_objs
