@@ -53,9 +53,13 @@ async def _tt_():
     # trxs = get_users_chain_token_trxs(
     #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
 
+    # s = []
+
     # for trx in trxs:
     #     if trx.tokens != None and len(trx.tokens) > 1:
-    #         print(trx)
+    #         s.append(trx)
+
+    # print(s)
 
     # a = list(Trx.mongo_client(1).find({"hash": "0xd8a1285b6fdde75a706c90eef61d21e33cafbb47e658ed3695eb16f4d7716b4a"}))
 

@@ -113,9 +113,9 @@ def create_trxs(
                         same_trxs_tokens.append(token)
                         created_trxs_tokens[trx.get("hash")] = same_trxs_tokens
                     trx["tokens"] = same_trxs_tokens
-                    logging.info(
-                        f"trx: {trx.get('hash')} in chain: {chain_id} has more than one token.")
-                    logging.info(same_trxs_tokens)
+                    # logging.info(
+                    #     f"trx: {trx.get('hash')} in chain: {chain_id} has more than one token.")
+                    # logging.info(same_trxs_tokens)
                 else:
                     token = create_trx_token(chain_id, trx)
                     if token != None:
@@ -143,11 +143,11 @@ def create_trxs(
         trx["timeStamp"] = int(trx.get("timeStamp"))
         trx_obj = parse_obj_as(Trx, trx)
         trxs[trx_obj.hash] = trx_obj.dict()
-        if trx_obj.tokens and len(trx_obj.tokens) > 1:
-            if trx_obj.dict().get("tokens") and len(trx_obj.dict().get("tokens")) > 1:
-                logging.info("multi tokens saved")
-                logging.info(
-                    f'------------------------------------------------> {trx_obj.dict().get("tokens")}')
+        # if trx_obj.tokens and len(trx_obj.tokens) > 1:
+            # if trx_obj.dict().get("tokens") and len(trx_obj.dict().get("tokens")) > 1:
+            #     logging.info("multi tokens saved")
+            #     logging.info(
+            #         f'------------------------------------------------> {trx_obj.dict().get("tokens")}')
 
     return list(trxs.values())
 
@@ -185,10 +185,10 @@ def insert_trxs(
     client = Trx.mongo_client(chain_id)
 
     for trx in trxs:
-        if trx.get("tokens") and len(trx.get("tokens")) > 1:
-            logging.info(
-                f"Mongo -----------------------------> Trx: {trx.get('hash')} in chain: {chain_id} has more than one token")
-            logging.info(trx.get("tokens"))
+        # if trx.get("tokens") and len(trx.get("tokens")) > 1:
+        #     logging.info(
+        #         f"Mongo -----------------------------> Trx: {trx.get('hash')} in chain: {chain_id} has more than one token")
+        #     logging.info(trx.get("tokens"))
         try:
             client.insert_one(trx)
             cache_last_block_number(
