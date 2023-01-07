@@ -144,8 +144,10 @@ def create_trxs(
         trx_obj = parse_obj_as(Trx, trx)
         trxs[trx_obj.hash] = trx_obj.dict()
         if trx_obj.tokens and len(trx_obj.tokens) > 1:
-            if trx_obj.dict().get("tokens"):
+            if trx_obj.dict().get("tokens") and len(trx_obj.dict().get("tokens")) > 1:
                 logging.info("multi tokens saved")
+                logging.info(
+                    f'------------------------------------------------> {trx_obj.dict().get("tokens")}')
 
     return list(trxs.values())
 
@@ -184,7 +186,8 @@ def insert_trxs(
 
     for trx in trxs:
         if trx.get("tokens") and len(trx.get("tokens")) > 1:
-            logging.info(f"Mongo --> Trx: {trx.get('hash')} in chain: {chain_id} has more than one token")
+            logging.info(
+                f"Mongo --> Trx: {trx.get('hash')} in chain: {chain_id} has more than one token")
             logging.info(trx.get("tokens"))
         try:
             client.insert_one(trx)
