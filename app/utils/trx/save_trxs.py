@@ -144,7 +144,8 @@ def create_trxs(
         trx_obj = parse_obj_as(Trx, trx)
         trxs[trx_obj.hash] = trx_obj.dict()
         if trx_obj.tokens and len(trx_obj.tokens) > 1:
-            logging.info("multi tokens saved")
+            if trx_obj.dict().get("tokens"):
+                logging.info("multi tokens saved")
 
     return list(trxs.values())
 
