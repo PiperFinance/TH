@@ -55,5 +55,5 @@ class Trx(Chain):
     @classmethod
     def mongo_client(cls, chain_id: int) -> MongoClient:
         c = client(cls.__name__, chain_id)
-        c.create_index("hash", unique=True)
+        # c.create_index("hash", unique=True)
         return c

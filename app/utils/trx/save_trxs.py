@@ -187,7 +187,7 @@ def insert_trxs(
     for trx in trxs:
         if trx.get("tokens") and len(trx.get("tokens")) > 1:
             logging.info(
-                f"Mongo --> Trx: {trx.get('hash')} in chain: {chain_id} has more than one token")
+                f"Mongo -----------------------------> Trx: {trx.get('hash')} in chain: {chain_id} has more than one token")
             logging.info(trx.get("tokens"))
         try:
             client.insert_one(trx)
