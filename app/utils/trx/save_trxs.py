@@ -111,12 +111,12 @@ def create_trxs(
                     if token != None:
                         same_trxs_tokens.append(token)
                         created_trxs_tokens[trx.get("hash")] = same_trxs_tokens
-                    trx["token"] = same_trxs_tokens
+                    trx["tokens"] = same_trxs_tokens
                 else:
                     token = create_trx_token(chain_id, trx)
                     if token != None:
                         created_trxs_tokens[trx.get("hash")] = [token]
-                        trx["token"] = token
+                        trx["tokens"] = [token]
 
         input, labels = decode_trx_input_data(
             chain_id,
