@@ -36,8 +36,8 @@ def save_user_chain_token_trxs(
     address: Address
 ):
     for trx_type in TrxType:
-        start_block = 0
-        # start_block = get_last_block_number(chain_id, address, trx_type.value)
+        # start_block = 0
+        start_block = get_last_block_number(chain_id, address, trx_type.value)
 
         trx_url = trx_type.url
 
