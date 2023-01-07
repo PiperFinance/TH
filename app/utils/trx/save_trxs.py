@@ -87,7 +87,7 @@ def get_user_chain_token_trxs(
             res = res.json()
             if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
                 return res.get("result")
-        except requests.exceptions.JSONDecodeError or requests.exceptions.SSLError:
+        except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
             continue
 
 

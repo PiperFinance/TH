@@ -1,5 +1,6 @@
 import logging
 import requests
+from web3 import exceptions
 from typing import List
 from pydantic import parse_obj_as
 
@@ -58,6 +59,5 @@ def get_trx_input_from_web3(
         web3_trx = w3.eth.get_transaction(hash)
         if web3_trx:
             return web3_trx.get("input")
-    # except Exception as e:
-    except requests.exceptions.HTTPError:
+    except (requests.exceptions.HTTPError, exceptions.TransactionNotFound):
         return None
