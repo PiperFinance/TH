@@ -101,10 +101,22 @@ def create_trxs(
     trxs = dict()
     created_trxs_tokens = dict()
     for trx in users_trxs:
+        trx["type"] = trx_type
         trx["userAddress"] = Web3.toChecksumAddress(address)
+
+        input, labels = decode_trx_input_data(
+            chain_id,
+            trx.get("hash"),
+            trx.get("input")
+        )
+        if input:
+            trx["labels"] = labels
+            trx["input"] = input
+
         if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
             trx["contractAddress"] = Web3.toChecksumAddress(
                 trx.get("contractAddress"))
+
             if trx_type == TrxType.TOKEN_TRX.value:
                 if trx.get("hash") in created_trxs_tokens.keys():
                     same_trxs_tokens = created_trxs_tokens.get(trx.get("hash"))
@@ -122,15 +134,6 @@ def create_trxs(
                         created_trxs_tokens[trx.get("hash")] = [token]
                         trx["tokens"] = [token]
 
-        input, labels = decode_trx_input_data(
-            chain_id,
-            trx.get("hash"),
-            trx.get("input")
-        )
-        if input:
-            trx["labels"] = labels
-            trx["input"] = input
-
         # usd_price = get_usd_price(chain_id)
         # if usd_price:
         #     trx["gas"] = calculate_gas(trx.get("gas"), usd_price)
@@ -144,10 +147,10 @@ def create_trxs(
         trx_obj = parse_obj_as(Trx, trx)
         trxs[trx_obj.hash] = trx_obj.dict()
         # if trx_obj.tokens and len(trx_obj.tokens) > 1:
-            # if trx_obj.dict().get("tokens") and len(trx_obj.dict().get("tokens")) > 1:
-            #     logging.info("multi tokens saved")
-            #     logging.info(
-            #         f'------------------------------------------------> {trx_obj.dict().get("tokens")}')
+        # if trx_obj.dict().get("tokens") and len(trx_obj.dict().get("tokens")) > 1:
+        #     logging.info("multi tokens saved")
+        #     logging.info(
+        #         f'------------------------------------------------> {trx_obj.dict().get("tokens")}')
 
     return list(trxs.values())
 

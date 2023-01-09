@@ -33,6 +33,7 @@ class Trx(Chain):
     userAddress: Address
     labels: Optional[List[Label]]
     tokens: Optional[List[Token]]
+    type: Optional[str]
     blockNumber: StringBlockNumber
     timeStamp: int
     hash: str

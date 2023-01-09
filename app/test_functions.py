@@ -1,10 +1,22 @@
 
 async def _tt_():
     from utils.trx.save_trxs import save_user_chain_token_trxs, save_users_chain_token_trxs
+    from utils.trx.update_trxs import update_users_token_trxs, update_users_chain_token_trxs
     from utils.trx.get_trxs import get_users_chain_token_trxs
     from models import FunctionSelector, Trx
     from configs.redis_config import cache_client
     from utils.trx.decode_trx_input import decode_trx_input_data
+
+    # get_users_chain_token_trxs(
+    #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
+
+    # save_users_chain_token_trxs(
+    #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
+
+    # update_users_token_trxs(
+    #     [1],
+    #     ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"]
+    # )
 
     # keys = cache_client().keys("*")
     # cache_client().delete(*keys)
@@ -47,9 +59,6 @@ async def _tt_():
     # save_users_chain_token_trxs(
     #     56, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
 
-    # save_users_chain_token_trxs(
-    #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
-
     # trxs = get_users_chain_token_trxs(
     #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
 
@@ -78,4 +87,3 @@ async def _tt_():
     #     1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"], skip + 15, limit)
 
     pass
-

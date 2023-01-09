@@ -77,6 +77,9 @@ def get_users_chain_token_trxs(
         trxs = list(client.find(query).sort(
             "timeStamp", -1).skip(skip).limit(limit))
 
+    if trxs in [[], None]:
+        return
+
     return create_trx_objects(trxs)
 
 

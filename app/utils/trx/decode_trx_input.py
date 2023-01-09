@@ -12,12 +12,12 @@ from utils.types import ChainId
 def decode_trx_input_data(
     chain_id: ChainId,
     hash: str,
-    input: str
+    input: str = None
 ) -> List[Label]:
-    if input in ["deprecated", "0x", ""]:
+    if input in ["deprecated", "0x", "", None]:
         input = get_trx_input_from_web3(chain_id, hash)
         if input == None:
-            return None, None
+            return input, None
 
     labels = []
 
@@ -58,6 +58,10 @@ def get_trx_input_from_web3(
         w3 = Chain(chainId=chain_id).w3
         web3_trx = w3.eth.get_transaction(hash)
         if web3_trx:
-            return web3_trx.get("input")
+            input = web3_trx.get("input")
+            if input in ["deprecated", "0x", ""]:
+                return None
+            return input
+        return None
     except (requests.exceptions.HTTPError, exceptions.TransactionNotFound):
         return None
