@@ -5,7 +5,7 @@ async def _tt_():
     from utils.trx.get_trxs import get_users_chain_token_trxs
     from models import FunctionSelector, Trx
     from configs.redis_config import cache_client
-    from utils.trx.decode_trx_input import decode_trx_input_data
+    # from utils.trx.decode_trx_input import decode_trx_input_data
 
     # get_users_chain_token_trxs(
     #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
@@ -67,6 +67,10 @@ async def _tt_():
     # for trx in trxs:
     #     if trx.tokens != None and len(trx.tokens) > 1:
     #         s.append(trx)
+
+    # a = Trx.mongo_client(1).find_one({"hash": "0x4c511b426dbc3f3bca205df19a78052a6c5cc07eb09b2dadfd89d08644534e81"})
+
+    # print(a)
 
     # print(s)
 

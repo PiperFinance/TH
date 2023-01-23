@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 from models import Trx, Label
-from .decode_trx_input import decode_trx_input_data
+from .decode_trx_input import decode_trx_function_selector
 from .get_trxs import get_users_token_trxs, get_users_chain_token_trxs
 from utils.types import Address, ChainId
 
@@ -37,10 +37,12 @@ def update_trxs(
     for trx in trxs:
         try:
             if not trx.labels:
-                input, labels = decode_trx_input_data(
+                input, labels = decode_trx_function_selector(
                     trx.chainId,
                     trx.hash,
-                    trx.input
+                    trx.input,
+                    None,
+                    None
                 )
 
                 update_trx(

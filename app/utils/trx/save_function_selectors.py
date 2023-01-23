@@ -29,10 +29,11 @@ def make_function_selector_obj(function_selector: FunctionSelectorSchema):
     try:
         function_selector = function_selector.dict()
 
-        args = []
-        for arg in function_selector.get("args"):
-            args.append((arg[0], ArgType.convert(arg[1])))
-        function_selector["args"] = args
+        if function_selector.get('args'):
+            args = []
+            for arg in function_selector.get("args"):
+                args.append((arg[0], ArgType.convert(arg[1])))
+            function_selector["args"] = args
 
         function_selector = parse_obj_as(
             FunctionSelector, function_selector)

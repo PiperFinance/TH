@@ -33,7 +33,6 @@ class Trx(Chain):
     userAddress: Address
     labels: Optional[List[Label]]
     tokens: Optional[List[Token]]
-    type: Optional[str]
     blockNumber: StringBlockNumber
     timeStamp: int
     hash: str
@@ -48,7 +47,7 @@ class Trx(Chain):
     gasPrice: str
     gasUsed: str
     cumulativeGasUsed: str
-    input: str
+    input: Optional[str]
     confirmations: str
     isError: Optional[str]
     txreceipt_status: Optional[str]

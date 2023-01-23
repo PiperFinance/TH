@@ -6,8 +6,12 @@ from zlib import crc32
 from pydantic import parse_obj_as
 from typing import List, Dict
 from models import Trx, Chain, TrxType
-from .decode_trx_input import decode_trx_input_data
-from .get_trx_token import get_trx_token, get_token_price
+
+from .decode_trx_input import decode_trx_function_selector
+from .get_trx_token import (
+    get_trx_token,
+    get_token_price
+)
 from utils.sync_redis import (
     cache_last_block_number,
     get_last_block_number
@@ -35,32 +39,34 @@ def save_user_chain_token_trxs(
     chain_id: ChainId,
     address: Address
 ):
+    trxs = dict()
     for trx_type in TrxType:
-        # start_block = 0
         start_block = get_last_block_number(chain_id, address, trx_type.value)
 
         trx_url = trx_type.url
 
-        trxs = get_user_chain_token_trxs(
+        type_trxs = get_user_chain_token_trxs(
             chain_id,
             address,
             trx_url,
             start_block
         )
-        if trxs in [None, []]:
-            return
 
-        trxs = create_trxs(
-            chain_id,
-            address,
-            trxs,
-            trx_type.value
-        )
-        insert_trxs(
-            chain_id,
-            trxs,
-            trx_type.value
-        )
+        if type_trxs not in [None, []]:
+            trxs[trx_type.value] = type_trxs
+
+    if trxs in [None, {}]:
+        return
+
+    trxs = create_trxs(
+        chain_id,
+        address,
+        trxs
+    )
+    insert_trxs(
+        chain_id,
+        trxs
+    )
 
 
 def get_user_chain_token_trxs(
@@ -95,70 +101,124 @@ def get_user_chain_token_trxs(
 def create_trxs(
         chain_id: ChainId,
         address: Address,
-        users_trxs: List[Dict],
-        trx_type: str
+        users_trxs: Dict[str, List]
 ) -> List[Trx]:
-    trxs = dict()
+    total_trxs = dict()
     created_trxs_tokens = dict()
-    for trx in users_trxs:
-        trx["type"] = trx_type
-        trx["userAddress"] = Web3.toChecksumAddress(address)
-
-        input, labels = decode_trx_input_data(
-            chain_id,
-            trx.get("hash"),
-            trx.get("input")
-        )
-        if input:
-            trx["labels"] = labels
-            trx["input"] = input
-
-        if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
-            trx["contractAddress"] = Web3.toChecksumAddress(
-                trx.get("contractAddress"))
+    for trx_type, trxs in users_trxs.items():
+        for trx in trxs:
+            if trx_type == TrxType.NORMAL_TRX.value:
+                trx_dict = create_trx(chain_id, address, trx)
+                total_trxs[trx_dict.get("hash")] = trx_dict
+                cache_last_block_number(
+                    chain_id,
+                    trx_dict.get("userAddress"),
+                    trx_type,
+                    trx_dict.get("blockNumber")
+                )
 
             if trx_type == TrxType.TOKEN_TRX.value:
-                if trx.get("hash") in created_trxs_tokens.keys():
-                    same_trxs_tokens = created_trxs_tokens.get(trx.get("hash"))
-                    token = create_trx_token(chain_id, trx)
+                if trx.get("hash") in total_trxs.keys():
+                    existed_trx = total_trxs.get(trx.get("hash"))
+                    token, created_trxs_tokens = create_trx_tokens(
+                        chain_id, trx, created_trxs_tokens)
+
                     if token != None:
-                        same_trxs_tokens.append(token)
-                        created_trxs_tokens[trx.get("hash")] = same_trxs_tokens
-                    trx["tokens"] = same_trxs_tokens
-                    # logging.info(
-                    #     f"trx: {trx.get('hash')} in chain: {chain_id} has more than one token.")
-                    # logging.info(same_trxs_tokens)
+                        existed_trx["tokens"] = token
+                        total_trxs[trx.get("hash")] = existed_trx
+
                 else:
-                    token = create_trx_token(chain_id, trx)
-                    if token != None:
-                        created_trxs_tokens[trx.get("hash")] = [token]
-                        trx["tokens"] = [token]
+                    trx_dict = create_trx(
+                        chain_id,
+                        address,
+                        trx
+                    )
+                    cache_last_block_number(
+                        chain_id,
+                        trx_dict.get("userAddress"),
+                        trx_type,
+                        trx_dict.get("blockNumber")
+                    )
+                    token, created_trxs_tokens = create_trx_tokens(
+                        chain_id, trx, created_trxs_tokens)
+                    if token:
+                        trx_dict["tokens"] = token
+                    total_trxs[trx_dict.get("hash")] = trx_dict
 
-        # usd_price = get_usd_price(chain_id)
-        # if usd_price:
-        #     trx["gas"] = calculate_gas(trx.get("gas"), usd_price)
-        #     trx["gasUsed"] = calculate_gas(trx.get("gasUsed"), usd_price)
-        #     trx["cumulativeGasUsed"] = calculate_gas(
-        #         trx.get("cumulativeGasUsed"), usd_price)
+    return list(total_trxs.values())
 
-        trx["chainId"] = chain_id
-        trx["fromAddress"] = trx.get("from")
-        trx["timeStamp"] = int(trx.get("timeStamp"))
-        trx_obj = parse_obj_as(Trx, trx)
-        trxs[trx_obj.hash] = trx_obj.dict()
-        # if trx_obj.tokens and len(trx_obj.tokens) > 1:
-        # if trx_obj.dict().get("tokens") and len(trx_obj.dict().get("tokens")) > 1:
-        #     logging.info("multi tokens saved")
-        #     logging.info(
-        #         f'------------------------------------------------> {trx_obj.dict().get("tokens")}')
 
-    return list(trxs.values())
+def create_trx(
+    chain_id: ChainId,
+    address: Address,
+    trx: Dict
+):
+    trx["userAddress"] = Web3.toChecksumAddress(address)
+    if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
+        trx["contractAddress"] = Web3.toChecksumAddress(
+            trx.get("contractAddress"))
+
+    input, labels = decode_trx_function_selector(
+        chain_id,
+        trx.get("hash"),
+        trx.get("input"),
+        trx.get("methodId"),
+        trx.get("functionName")
+    )
+    trx["input"] = input
+    trx["labels"] = labels
+
+    trx["chainId"] = chain_id
+    trx["fromAddress"] = trx.get("from")
+    trx["timeStamp"] = int(trx.get("timeStamp"))
+
+    # usd_price = get_usd_price(chain_id)
+    # if usd_price:
+    #     trx["gas"] = calculate_gas(trx.get("gas"), usd_price)
+    #     trx["gasUsed"] = calculate_gas(trx.get("gasUsed"), usd_price)
+    #     trx["cumulativeGasUsed"] = calculate_gas(
+    #         trx.get("cumulativeGasUsed"), usd_price)
+
+    trx_obj = parse_obj_as(Trx, trx)
+    return trx_obj.dict()
+
+
+def create_trx_tokens(
+    chain_id: ChainId,
+    trx: Dict,
+    created_trxs_tokens: Dict
+):
+    token = None
+
+    if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
+        trx["contractAddress"] = Web3.toChecksumAddress(
+            trx.get("contractAddress"))
+
+        if trx.get("hash") in created_trxs_tokens.keys():
+            same_trxs_tokens = created_trxs_tokens.get(
+                trx.get("hash"))
+            token = create_trx_token(chain_id, trx)
+            if token != None:
+                same_trxs_tokens.append(token)
+                token = same_trxs_tokens
+                created_trxs_tokens[trx.get(
+                    "hash")] = token
+        else:
+            token = create_trx_token(chain_id, trx)
+            if token != None:
+                token = [token]
+                created_trxs_tokens[trx.get("hash")] = token
+
+    return token, created_trxs_tokens
 
 
 def create_trx_token(
     chain_id: ChainId,
-    trx: Dict,
+    trx: Dict
 ):
+    if not trx.get("tokenName"):
+        return None
+
     token = get_trx_token(
         chain_id,
         trx.get("contractAddress"),
@@ -182,23 +242,12 @@ def calculate_gas(gas: str, price: str):
 
 def insert_trxs(
     chain_id: ChainId,
-    trxs: List[Dict],
-    trx_type: str
+    trxs: List[Dict]
 ):
     client = Trx.mongo_client(chain_id)
 
     for trx in trxs:
-        # if trx.get("tokens") and len(trx.get("tokens")) > 1:
-        #     logging.info(
-        #         f"Mongo -----------------------------> Trx: {trx.get('hash')} in chain: {chain_id} has more than one token")
-        #     logging.info(trx.get("tokens"))
         try:
             client.insert_one(trx)
-            cache_last_block_number(
-                chain_id,
-                trx.get("userAddress"),
-                trx_type,
-                trx.get("blockNumber")
-            )
         except errors.DuplicateKeyError:
             continue
