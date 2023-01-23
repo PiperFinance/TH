@@ -157,16 +157,20 @@ def create_trx(
     if trx.get("contractAddress") not in ["0x", "", "0x0000000000000000000000000000000000000000", None]:
         trx["contractAddress"] = Web3.toChecksumAddress(
             trx.get("contractAddress"))
+    try:
 
-    input, labels = decode_trx_function_selector(
-        chain_id,
-        trx.get("hash"),
-        trx.get("input"),
-        trx.get("methodId"),
-        trx.get("functionName")
-    )
-    trx["input"] = input
-    trx["labels"] = labels
+        input, labels = decode_trx_function_selector(
+            chain_id,
+            trx.get("hash"),
+            trx.get("input"),
+            trx.get("methodId"),
+            trx.get("functionName")
+        )
+        trx["input"] = input
+        trx["labels"] = labels
+    except Exception as e:
+        logging.exception(
+            f"{e} -----------------> {trx.get('hash')} - {chain_id}")
 
     trx["chainId"] = chain_id
     trx["fromAddress"] = trx.get("from")
