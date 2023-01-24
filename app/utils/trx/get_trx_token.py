@@ -35,34 +35,38 @@ def get_trx_token(
     token_symbol: str,
     token_decimal: str
 ):
-    tokens = constants.tokens
-    token_checksum = crc32(
-        "-".join([token_address.lower(), str(chain_id)]).encode())
+    try:
+        tokens = constants.tokens
+        token_checksum = crc32(
+            "-".join([token_address.lower(), str(chain_id)]).encode())
 
-    token = tokens.get(token_checksum)
-    if not token:
-        token = {
-            "detail": {
-                "chainId": chain_id,
-                "address": token_address,
-                "name": token_name,
-                "symbol": token_symbol,
-                "decimals": int(token_decimal)
+        token = tokens.get(token_checksum)
+        if not token:
+            token = {
+                "detail": {
+                    "chainId": chain_id,
+                    "address": token_address,
+                    "name": token_name,
+                    "symbol": token_symbol,
+                    "decimals": int(token_decimal)
+                }
             }
-        }
 
-    token = parse_obj_as(Token, token)
+        token = parse_obj_as(Token, token)
 
-    balance = get_token_balance(
-        chain_id, token_address, user_address)
-    if balance:
-        token.balance = str(balance)
-    price = get_token_price(chain_id, token_checksum)
-    if price:
-        token.priceUSD = price
-        token.value = calculate_token_value(float(price), balance)
+        balance = get_token_balance(
+            chain_id, token_address, user_address)
+        if balance:
+            token.balance = str(balance)
+        price = get_token_price(chain_id, token_checksum)
+        if price:
+            token.priceUSD = price
+            token.value = calculate_token_value(float(price), balance)
 
-    return token.dict()
+        return token.dict()
+    except Exception as e:
+        logging.exception(
+            f'{e} -----------------------> {token_address} - {user_address} - {token_name}')
 
 
 def get_token_price(chain_id: ChainId, token_id: int):
@@ -74,7 +78,7 @@ def get_token_price(chain_id: ChainId, token_id: int):
         if res.text == '':
             return None
         res = np.format_float_positional(float(res.text), trim='-')
-    except requests.exceptions.ConnectionError:
+    except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout):
         return None
 
 
@@ -88,7 +92,7 @@ def get_token_balance(
         contract = w3.eth.contract(token_address, abi=token_abi)
         balance = contract.functions.balanceOf(user_address).call()
         return balance
-    except exceptions.ContractLogicError:
+    except (exceptions.ContractLogicError, requests.exceptions.ReadTimeout):
         return None
 
 
