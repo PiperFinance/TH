@@ -1,6 +1,6 @@
 from enum import Enum
 from pydantic import BaseModel
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Union
 
 from . import Chain
 from .token import Token
@@ -40,7 +40,7 @@ class Trx(Chain):
     blockHash: str
     fromAddress: Address
     contractAddress: Optional[str]
-    to: Address
+    to: Union[Address, str]
     value: str
     transactionIndex: str
     gas: str
