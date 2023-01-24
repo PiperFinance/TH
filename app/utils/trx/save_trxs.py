@@ -10,7 +10,8 @@ from models import Trx, Chain, TrxType
 from .decode_trx_input import decode_trx_function_selector
 from .get_trx_token import (
     get_trx_token,
-    get_token_price
+    get_token_price,
+    get_chain_native_token
 )
 from utils.sync_redis import (
     cache_last_block_number,
@@ -176,12 +177,12 @@ def create_trx(
     trx["fromAddress"] = trx.get("from")
     trx["timeStamp"] = int(trx.get("timeStamp"))
 
-    # usd_price = get_usd_price(chain_id)
-    # if usd_price:
-    #     trx["gas"] = calculate_gas(trx.get("gas"), usd_price)
-    #     trx["gasUsed"] = calculate_gas(trx.get("gasUsed"), usd_price)
-    #     trx["cumulativeGasUsed"] = calculate_gas(
-    #         trx.get("cumulativeGasUsed"), usd_price)
+    usd_price = get_usd_price(chain_id)
+    if usd_price:
+        trx["gas"] = calculate_gas(trx.get("gas"), usd_price)
+        trx["gasUsed"] = calculate_gas(trx.get("gasUsed"), usd_price)
+        trx["cumulativeGasUsed"] = calculate_gas(
+            trx.get("cumulativeGasUsed"), usd_price)
 
     trx_obj = parse_obj_as(Trx, trx)
     return trx_obj.dict()
@@ -203,14 +204,13 @@ def create_trx_tokens(
                 trx.get("hash"))
             token = create_trx_token(chain_id, trx)
             if token != None:
-                same_trxs_tokens.append(token)
-                token = same_trxs_tokens
+                same_trxs_tokens.extend(token)
+                token = list(tuple(same_trxs_tokens))
                 created_trxs_tokens[trx.get(
                     "hash")] = token
         else:
             token = create_trx_token(chain_id, trx)
             if token != None:
-                token = [token]
                 created_trxs_tokens[trx.get("hash")] = token
 
     return token, created_trxs_tokens
@@ -231,7 +231,19 @@ def create_trx_token(
         trx.get("tokenSymbol"),
         trx.get("tokenDecimal")
     )
-    return token
+
+    if trx.get("value") not in ["0", "", None]:
+        native = get_chain_native_token(
+            chain_id,
+            trx.get("userAddress")
+        )
+        if None not in [native, token]:
+            return [token, native]
+
+    if token:
+        return [token]
+
+    return None
 
 
 def get_usd_price(chain_id: ChainId):

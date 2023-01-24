@@ -12,6 +12,21 @@ from utils.abis import token_abi
 from utils.types import ChainId, Address
 
 
+def get_chain_native_token(
+    chain_id,
+    user_address
+):
+    native = Chain(chainId=chain_id).wNative
+    return get_trx_token(
+        chain_id,
+        native.get("address"),
+        user_address,
+        native.get("name"),
+        native.get("symbol"),
+        native.get("decimals")
+    )
+
+
 def get_trx_token(
     chain_id: ChainId,
     token_address: Address,
@@ -37,14 +52,15 @@ def get_trx_token(
         }
 
     token = parse_obj_as(Token, token)
-    # balance = get_token_balance(
-    #     chain_id, token_address, user_address)
-    # if balance:
-    #     token.balance = str(balance)
-    # price = get_token_price(chain_id, token_checksum)
-    # if price:
-    #     token.priceUSD = price
-    #     token.value = calculate_token_value(float(price), balance)
+
+    balance = get_token_balance(
+        chain_id, token_address, user_address)
+    if balance:
+        token.balance = str(balance)
+    price = get_token_price(chain_id, token_checksum)
+    if price:
+        token.priceUSD = price
+        token.value = calculate_token_value(float(price), balance)
 
     return token.dict()
 
@@ -53,7 +69,7 @@ def get_token_price(chain_id: ChainId, token_id: int):
     url = f"https://tp.piper.finance/?chainId={chain_id}&tokenId={token_id}"
     try:
         res = requests.get(url)
-        logging.info(f"--------------------------------->{res.text}")
+        # logging.info(f"--------------------------------->{res.text}")
 
         if res.text == '':
             return None

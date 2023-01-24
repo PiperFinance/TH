@@ -1,5 +1,5 @@
 from web3 import Web3
-from typing import List, Dict
+from typing import List
 from pydantic import BaseModel
 
 from configs.constant_config import constants
@@ -25,6 +25,10 @@ class Chain(BaseModel):
     def w3(self) -> Web3:
         rpc = constants.chains[self.chainId]["rpcUrls"]["default"]
         return Web3(Web3.HTTPProvider(rpc))
+
+    @property
+    def wNative(self):
+        return constants.chains[self.chainId]["wNativeCurrency"]
 
     @classmethod
     def mongo_client(cls, chain_id: ChainId) -> MongoClient:
