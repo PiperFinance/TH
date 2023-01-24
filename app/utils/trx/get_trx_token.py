@@ -63,7 +63,8 @@ def get_trx_token(
             token.priceUSD = price
             token.value = calculate_token_value(float(price), balance)
 
-        return token.dict()
+        # return token.dict()
+        return token
     except Exception as e:
         logging.exception(
             f'{e} -----------------------> {token_address} - {user_address} - {token_name}')
