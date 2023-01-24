@@ -5,7 +5,8 @@ from web3 import Web3
 from zlib import crc32
 from pydantic import parse_obj_as
 from typing import List, Dict
-from models import Trx, Chain, TrxType
+from models import Trx, Chain, TrxType, token
+
 
 from .decode_trx_input import decode_trx_function_selector
 from .get_trx_token import (
@@ -134,7 +135,8 @@ def create_trxs(
                         created_trxs_tokens
                     )
 
-                    if token != None:
+                    if token:
+                        token = make_token_dic(token)
                         existed_trx["tokens"] = token
                         total_trxs[trx.get("hash")] = existed_trx
 
@@ -158,6 +160,7 @@ def create_trxs(
                         created_trxs_tokens
                     )
                     if token:
+                        token = make_token_dic(token)
                         trx_dict["tokens"] = token
                     total_trxs[trx_dict.get("hash")] = trx_dict
 
@@ -193,7 +196,6 @@ def create_trx(
     trx["fromAddress"] = trx.get("from")
     trx["timeStamp"] = int(trx.get("timeStamp"))
 
-    # usd_price = get_usd_price(chain_id)
     if usd_price:
         trx["gas"] = calculate_gas(trx.get("gas"), usd_price)
         trx["gasUsed"] = calculate_gas(trx.get("gasUsed"), usd_price)
@@ -280,6 +282,14 @@ def get_usd_price(chain_id: ChainId):
 
 def calculate_gas(gas: str, price: str):
     return int(gas) * float(price) * 0.000000001
+
+
+def make_token_dic(tokens: List[token.Token]):
+    token_dict_list = []
+    for token in tokens:
+        token_dict_list.append(token.dict())
+
+    return token_dict_list
 
 
 def insert_trxs(
