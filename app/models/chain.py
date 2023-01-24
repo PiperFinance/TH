@@ -23,7 +23,7 @@ class Chain(BaseModel):
 
     @property
     def w3(self) -> Web3:
-        rpc = constants.chains[self.chainId]["defaultRpcUrl"]
+        rpc = constants.chains[self.chainId]["rpcUrls"]["default"]
         return Web3(Web3.HTTPProvider(rpc))
 
     @classmethod
