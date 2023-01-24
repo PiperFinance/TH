@@ -105,7 +105,8 @@ def create_trxs(
     address: Address,
     users_trxs: Dict[str, List]
 ) -> List[Trx]:
-    usd_price = get_usd_price(chain_id)
+    # usd_price = get_usd_price(chain_id)
+    # usd_price = None
     total_trxs = dict()
     created_trxs_tokens = dict()
     for trx_type, trxs in users_trxs.items():
@@ -114,9 +115,7 @@ def create_trxs(
                 trx_dict = create_trx(
                     chain_id,
                     address,
-                    trx,
-                    usd_price
-                )
+                    trx)
                 total_trxs[trx_dict.get("hash")] = trx_dict
                 cache_last_block_number(
                     chain_id,
@@ -136,7 +135,7 @@ def create_trxs(
                     )
 
                     if token:
-                        token = make_token_dic(token)
+                        token = make_token_dict(token)
                         existed_trx["tokens"] = token
                         total_trxs[trx.get("hash")] = existed_trx
 
@@ -144,8 +143,7 @@ def create_trxs(
                     trx_dict = create_trx(
                         chain_id,
                         address,
-                        trx,
-                        usd_price
+                        trx
                     )
                     cache_last_block_number(
                         chain_id,
@@ -160,7 +158,7 @@ def create_trxs(
                         created_trxs_tokens
                     )
                     if token:
-                        token = make_token_dic(token)
+                        token = make_token_dict(token)
                         trx_dict["tokens"] = token
                     total_trxs[trx_dict.get("hash")] = trx_dict
 
@@ -284,7 +282,7 @@ def calculate_gas(gas: str, price: str):
     return int(gas) * float(price) * 0.000000001
 
 
-def make_token_dic(tokens: List[token.Token]):
+def make_token_dict(tokens: List[token.Token]):
     token_dict_list = []
     for token in tokens:
         token_dict_list.append(token.dict())

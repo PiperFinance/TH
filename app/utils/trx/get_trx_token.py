@@ -54,16 +54,15 @@ def get_trx_token(
 
         token = parse_obj_as(Token, token)
 
-        balance = get_token_balance(
-            chain_id, token_address, user_address)
-        if balance:
-            token.balance = str(balance)
-        price = get_token_price(chain_id, token_checksum)
-        if price:
-            token.priceUSD = price
-            token.value = calculate_token_value(float(price), balance)
+        # balance = get_token_balance(
+        #     chain_id, token_address, user_address)
+        # if balance:
+        #     token.balance = str(balance)
+        # price = get_token_price(chain_id, token_checksum)
+        # if price:
+        #     token.priceUSD = price
+        #     token.value = calculate_token_value(float(price), balance)
 
-        # return token.dict()
         return token
     except Exception as e:
         logging.exception(
