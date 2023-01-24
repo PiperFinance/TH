@@ -226,7 +226,7 @@ def create_trx_tokens(
             )
             if token != None:
                 same_trxs_tokens.extend(token)
-                token = list(tuple(same_trxs_tokens))
+                token = list(set(same_trxs_tokens))
                 created_trxs_tokens[trx.get(
                     "hash")] = token
         else:
