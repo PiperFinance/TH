@@ -5,35 +5,23 @@ async def _tt_():
     from utils.trx.get_trxs import get_users_chain_token_trxs
     from models import FunctionSelector, Trx
     from configs.redis_config import cache_client
+    from tt1 import get_trxs_with_input_and_no_labels
     # from utils.trx.decode_trx_input import decode_trx_input_data
 
-    # get_users_chain_token_trxs(
-    #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
+    # 0x73205B2F021E519f75418Ce41C33Dbae9470C238
 
     # save_users_chain_token_trxs(
-    #     1, ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"])
+    #     1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
+
+    # trxs = get_users_chain_token_trxs(
+    #     1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
 
     # update_users_token_trxs(
     #     [1],
-    #     ["0x73205B2F021E519f75418Ce41C33Dbae9470C238"]
+    #     ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"]
     # )
 
-    # keys = cache_client().keys("*")
-    # cache_client().delete(*keys)
-
-    # Trx.mongo_client(10).drop()
-
-    # t1 = Trx.mongo_client(1)
-    # t2 = Trx.mongo_client(250)
-    # f = FunctionSelector.mongo_client()
-
-    # t1.drop()
-    # t2.drop()
-    # f.drop()
-
-    # q = list(t1.find())
-    # s = list(t2.find())
-    # v = list(f.find())
+    # get_trxs_with_input_and_no_labels(trxs)
 
     # c = FunctionSelector.mongo_client()
     # c.insert_one({

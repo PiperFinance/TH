@@ -5,8 +5,7 @@ from . import (
     get_function_selectors,
     get_trxs,
     save_function_selectors,
-    save_trxs,
-    update_trxs
+    save_trxs
 )
 
 routers = APIRouter()
@@ -24,10 +23,6 @@ routers.include_router(
     save_trxs.routes,
     tags=["Save Transaction"])
 
-
-routers.include_router(
-    update_trxs.routes,
-    tags=["Update Transaction"])
 
 routers.include_router(
     get_trxs.routes,

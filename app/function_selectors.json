@@ -251,5 +251,77 @@
       ["_amount", "uint256"],
       ["_correlationId", "string"]
     ]
+  },
+  {
+    "hex": "0xa42570df",
+    "text": "executeProposal",
+    "args": [
+      ["chainID", "uint8"],
+      ["depositNonce", "uint64"],
+      ["data", "bytes"],
+      ["resourceID", "bytes32"],
+      ["flags", "uint256[]"],
+      ["path", "address[]"],
+      ["dataTx", "bytes[]"]
+    ]
+  },
+  {
+    "hex": "0x81aa7a81",
+    "text": "anySwapInAuto",
+    "args": [
+      ["swapID", "string"],
+      ["swapInfo", "tuple"]
+    ]
+  },
+  {
+    "hex": "0xc204642c",
+    "text": "airdrop",
+    "args": [
+      ["_to", "address[]"],
+      ["_amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xc204642c",
+    "text": "airdrop",
+    "args": [
+      ["_to", "address[]"],
+      ["_amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x2c54de4f",
+    "text": "transferToken",
+    "args": [
+      ["token", "address"],
+      ["from", "address"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x2307b441",
+    "text": "airdropToWallets",
+    "args": [
+      ["wallets", "address[]"],
+      ["amountsInTokens", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xffc3a769",
+    "text": "transfer",
+    "args": [
+      ["_address", "address[]"],
+      ["_values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x2c54de4f",
+    "text": "transferToken",
+    "args": [
+      ["token", "address"],
+      ["from", "address"],
+      ["to", "address"],
+      ["value", "uint256"]
+    ]
   }
 ]
