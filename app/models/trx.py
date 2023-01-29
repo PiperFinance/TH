@@ -1,4 +1,5 @@
 from enum import Enum
+import pymongo
 from pydantic import BaseModel
 from typing import List, Optional, Any, Union
 
@@ -56,4 +57,5 @@ class Trx(Chain):
     def mongo_client(cls, chain_id: int) -> MongoClient:
         c = client(cls.__name__, chain_id)
         c.create_index("hash", unique=True)
+        c.create_index([("timeStamp", pymongo.DESCENDING)], background=True)
         return c

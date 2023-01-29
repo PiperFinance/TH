@@ -106,7 +106,6 @@ def create_trxs(
     users_trxs: Dict[str, List]
 ) -> List[Trx]:
     # usd_price = get_usd_price(chain_id)
-    # usd_price = None
     total_trxs = dict()
     created_trxs_tokens = dict()
     for trx_type, trxs in users_trxs.items():

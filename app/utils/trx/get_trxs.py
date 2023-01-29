@@ -68,14 +68,17 @@ def get_users_chain_token_trxs(
         query = {"userAddress": addresses}
 
     if limit < 1:
-        trxs = list(client.find(query).sort("timeStamp", -1))
+        # trxs = list(client.find(query).sort("timeStamp", -1))
+        trxs = list(client.find(query))
 
     if skip < 1:
-        trxs = list(client.find(query).sort("timeStamp", -1).limit(limit))
+        # trxs = list(client.find(query).sort("timeStamp", -1).limit(limit))
+        trxs = list(client.find(query).limit(limit))
 
     else:
-        trxs = list(client.find(query).sort(
-            "timeStamp", -1).skip(skip).limit(limit))
+        # trxs = list(client.find(query).sort(
+        #     "timeStamp", -1).skip(skip).limit(limit))
+        trxs = list(client.find(query).skip(skip).limit(limit))
 
     if trxs in [[], None]:
         return
