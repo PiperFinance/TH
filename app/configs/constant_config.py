@@ -7,9 +7,11 @@ from pathlib import Path
 
 from utils.types import ChainId
 
-_chains = requests.get(
-    "https://raw.githubusercontent.com/PiperFinance/CD/main/chains/mainnet.json")
-_chains = _chains.json()
+# _chains = requests.get(
+#     "https://raw.githubusercontent.com/PiperFinance/CD/main/chains/mainnet.json")
+
+with requests.request("GET", url="https://raw.githubusercontent.com/PiperFinance/CD/main/chains/mainnet.json") as _chains:
+    _chains = _chains.json()
 
 chains = {}
 
@@ -17,9 +19,11 @@ for chain in _chains:
     chains[chain.get("id")] = chain
 
 
-_tokens = requests.get(
-    "https://raw.githubusercontent.com/PiperFinance/CD/main/tokens/outVerified/all_tokens.json")
-_tokens = _tokens.json()
+# _tokens = requests.get(
+#     "https://raw.githubusercontent.com/PiperFinance/CD/main/tokens/outVerified/all_tokens.json")
+
+with requests.request("GET", url="https://raw.githubusercontent.com/PiperFinance/CD/main/tokens/outVerified/all_tokens.json") as _tokens:
+    _tokens = _tokens.json()
 
 tokens = {}
 

@@ -13,13 +13,13 @@ async def _tt_():
     # save_users_chain_token_trxs(
     #     1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
 
-    # trxs = get_users_chain_token_trxs(
-    #     1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
-
     # update_users_token_trxs(
     #     [1],
     #     ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"]
     # )
+
+    # trxs = get_users_chain_token_trxs(
+    #     1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
 
     # get_trxs_with_input_and_no_labels(trxs)
 

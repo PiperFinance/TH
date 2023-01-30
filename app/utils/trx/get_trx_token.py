@@ -72,12 +72,11 @@ def get_trx_token(
 def get_token_price(chain_id: ChainId, token_id: int):
     url = f"https://tp.piper.finance/?chainId={chain_id}&tokenId={token_id}"
     try:
-        res = requests.get(url)
-        # logging.info(f"--------------------------------->{res.text}")
-
-        if res.text == '':
-            return None
-        res = np.format_float_positional(float(res.text), trim='-')
+        # res = requests.get(url)
+        with requests.request("GET", url=url) as res:
+            if res.text == '':
+                return None
+            res = np.format_float_positional(float(res.text), trim='-')
     except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout):
         return None
 

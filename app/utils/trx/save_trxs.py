@@ -5,9 +5,8 @@ from web3 import Web3
 from zlib import crc32
 from pydantic import parse_obj_as
 from typing import List, Dict
+
 from models import Trx, Chain, TrxType, token
-
-
 from .decode_trx_input import decode_trx_function_selector
 from .get_trx_token import (
     get_trx_token,
@@ -92,8 +91,9 @@ def get_user_chain_token_trxs(
     for api_key in api_keys:
         try:
             url = f"{url}{trx_url}{api_key}"
-            res = requests.post(url=url, data=data)
-            res = res.json()
+            # res = requests.post(url=url, data=data)
+            with requests.request("POST", url=url, data=data) as res:
+                res = res.json()
             if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
                 return res.get("result")
         except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
