@@ -10,9 +10,19 @@ class BaseResponse(BaseModel):
     result: Any = None
 
 
+class TrxResult(BaseModel):
+    count: Optional[int]
+    trxs: Optional[List[Trx]]
+
+
 class TrxList(BaseResponse):
-    result: Optional[List[Trx]]
+    result: Optional[TrxResult]
+
+
+class FunctionSelectorResult(BaseModel):
+    count: Optional[int]
+    function_selectors: Optional[List[FunctionSelector]]
 
 
 class FunctionSelectorList(BaseResponse):
-    result: Optional[List[FunctionSelector]]
+    result: Optional[FunctionSelectorResult]

@@ -14,19 +14,6 @@ from utils.types import ChainId, Address
 routes = APIRouter()
 
 
-@routes.get("/get_users_chain_trxs_len")
-async def get_users_chain_trxs_len(
-    chainId: ChainId,
-    # userAddress: List[Address] | None = Query(default=None)
-    userAddress: List[Address] or None = Query(default=None)
-) -> int:
-    try:
-        trx_len = get_users_chain_token_trxs_len(chainId, userAddress)
-        return trx_len
-    except Exception as e:
-        logging.exception(e)
-
-
 @routes.get("/get_users_chain_trxs", response_model=TrxList)
 async def get_users_chain_trxs(
     pageSize: int,
@@ -36,25 +23,17 @@ async def get_users_chain_trxs(
     userAddress: List[Address] or None = Query(default=None)
 ):
     try:
-        skip = pageSize * (pageNumber - 1)
+        trx_len = get_users_chain_token_trxs_len(chainId, userAddress)
 
+        skip = pageSize * (pageNumber - 1)
         trxs = get_users_chain_token_trxs(
             chainId, userAddress, skip, pageSize)
-        return {"result": trxs}
-    except Exception as e:
-        logging.exception(e)
-
-
-@routes.get("/get_users_trxs_len")
-async def get_users_chain_trxs_len(
-    # chainId: List[ChainId] | None = Query(default=None)
-    chainId: List[ChainId] or None = Query(default=None),
-    # userAddress: List[Address] | None = Query(default=None)
-    userAddress: List[Address] or None = Query(default=None)
-) -> int:
-    try:
-        trx_len = get_users_token_trxs_len(chainId, userAddress)
-        return trx_len
+        return {
+            "result": {
+                "count": trx_len,
+                "trxs": trxs
+            }
+        }
     except Exception as e:
         logging.exception(e)
 
@@ -69,10 +48,16 @@ async def get_users_trxs(
     userAddress: List[Address] or None = Query(default=None)
 ):
     try:
-        skip = pageSize * (pageNumber - 1)
+        trx_len = get_users_token_trxs_len(chainId, userAddress)
 
+        skip = pageSize * (pageNumber - 1)
         trxs = get_users_token_trxs(
             chainId, userAddress, skip, pageSize)
-        return {"result": trxs}
+        return {
+            "result": {
+                "count": trx_len,
+                "trxs": trxs
+            }
+        }
     except Exception as e:
         logging.exception(e)

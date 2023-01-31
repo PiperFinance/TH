@@ -13,14 +13,6 @@ from utils.types import HexStr
 routes = APIRouter()
 
 
-@routes.get("/get_all_function_selectors_len")
-async def get_all_func_selectors_len() -> int:
-    try:
-        return get_all_function_selectors_len()
-    except Exception as e:
-        logging.exception(e)
-
-
 @routes.get(
     "/get_all_function_selectors",
     response_model=FunctionSelectorList
@@ -30,9 +22,16 @@ async def get_all_func_selectors(
     pageNumber: int
 ):
     try:
+        func_selector_len = get_all_function_selectors_len()
+
         skip = pageSize * (pageNumber - 1)
         result = get_all_function_selectors(skip, pageSize)
-        return {"result": result}
+        return {
+            "result": {
+                "count": func_selector_len,
+                "function_selectors": result
+            }
+        }
     except Exception as e:
         logging.exception(e)
 
