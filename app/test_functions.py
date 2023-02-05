@@ -11,7 +11,7 @@ async def _tt_():
     # 0x73205B2F021E519f75418Ce41C33Dbae9470C238
 
     # save_users_chain_token_trxs(
-    #     1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
+    #     56, ["0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1"])
 
     # update_users_token_trxs(
     #     [1],
@@ -19,7 +19,7 @@ async def _tt_():
     # )
 
     # trxs = get_users_chain_token_trxs(
-    #     1, ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"])
+    #     56, ["0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1"])
 
     # get_trxs_with_input_and_no_labels(trxs)
 

@@ -16,9 +16,9 @@ class TrxType(Enum):
     @property
     def url(self):
         if self.value == "normal":
-            return "?module=account&action=txlist&apikey="
+            return "?module=account&action=txlist"
         if self.value == "token":
-            return "?module=account&action=tokentx&apikey="
+            return "?module=account&action=tokentx"
 
 
 class Label(BaseModel):

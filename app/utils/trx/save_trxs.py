@@ -77,27 +77,89 @@ def get_user_chain_token_trxs(
     start_block: int = 0
 ) -> List[Dict]:
 
+    if not start_block:
+        start_block = 0
+
+    result = get_token_trxs(
+        chain_id,
+        address,
+        trx_url,
+        start_block,
+        False
+    )
+    if len(result) < 10000:
+        return result
+
+    return get_token_trxs(
+        chain_id,
+        address,
+        trx_url,
+        start_block,
+        True
+    )
+
+
+def get_token_trxs(
+    chain_id: ChainId,
+    address: Address,
+    trx_url: str,
+    start_block: int,
+    chunk: bool = False
+):
+    if not chunk or (start_block + 10000) > 99999999:
+        return get_token_trxs_from_scanner(
+            chain_id,
+            address,
+            trx_url,
+            start_block,
+            99999999
+        )
+
+    result = []
+    for block_number in (start_block, 99999999, 10000):
+        result.extend(get_token_trxs_from_scanner(
+            chain_id,
+            address,
+            trx_url,
+            start_block,
+            block_number
+        ))
+    return result
+
+
+def get_token_trxs_from_scanner(
+    chain_id: ChainId,
+    address: Address,
+    trx_url: str,
+    start_block: int = 0,
+    end_block: int = 99999999
+):
     chain = Chain(chainId=chain_id)
     url = chain.url
     api_keys = chain.api_keys
 
-    data = {
-        "address": address,
-        "startblock": start_block,
-        "endblock": 99999999,
-        "sort": "asc"
-    }
+    # data = {
+    #     "address": address,
+    #     "startblock": start_block,
+    #     "endblock": end_block,
+    #     "sort": "asc"
+    # }
+
+    data = f"&address={address}&startblock={start_block}&endblock={end_block}&sort=asc"
 
     for api_key in api_keys:
         try:
-            url = f"{url}{trx_url}{api_key}"
-            # res = requests.post(url=url, data=data)
-            with requests.request("POST", url=url, data=data) as res:
+            # url = f"{url}{trx_url}{api_key}"
+            url = f"{url}{trx_url}{data}&apikey={api_key}"
+
+            # with requests.request("POST", url=url, data=data) as res:
+            with requests.request("GET", url=url) as res:
                 res = res.json()
             if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
                 return res.get("result")
         except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
             continue
+    retuwwwwrn []
 
 
 def create_trxs(
