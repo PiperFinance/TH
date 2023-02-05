@@ -159,7 +159,7 @@ def get_token_trxs_from_scanner(
                 return res.get("result")
         except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
             continue
-    retuwwwwrn []
+    return []
 
 
 def create_trxs(
