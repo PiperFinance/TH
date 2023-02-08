@@ -19,10 +19,7 @@ def decode_trx_function_selector(
     function_name: str = None
 ):
     labels = None
-    if input in ["deprecated", "0x", "", None]:
-        input = get_trx_input_from_web3(chain_id, hash)
-
-    if input:
+    if input not in ["deprecated", "0x", "", None]:
         function_selector, labels = get_and_create_function_selector(input)
         if function_selector:
             if function_selector.args:
@@ -51,23 +48,6 @@ def decode_trx_function_selector(
             labels = save_and_create_function_selector(
                 method_id, function_name)
     return input, labels
-
-
-def get_trx_input_from_web3(
-    chain_id: ChainId,
-    hash: str
-):
-    try:
-        w3 = Chain(chainId=chain_id).w3
-        web3_trx = w3.eth.get_transaction(hash)
-        if web3_trx:
-            input = web3_trx.get("input")
-            if input in ["deprecated", "0x", ""]:
-                return None
-            return input
-        return None
-    except (requests.exceptions.HTTPError, exceptions.TransactionNotFound):
-        return None
 
 
 def get_and_create_function_selector(

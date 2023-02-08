@@ -32,6 +32,7 @@ class Label(BaseModel):
 
 class Trx(Chain):
     userAddress: Address
+    type: Optional[int]
     labels: Optional[List[Label]]
     tokens: Optional[List[Token]]
     blockNumber: StringBlockNumber

@@ -292,15 +292,22 @@ def create_trx(
         trx["contractAddress"] = Web3.toChecksumAddress(
             trx.get("contractAddress"))
     try:
-
-        input, labels = decode_trx_function_selector(
+        input, type = get_trx_input_and_type_from_web3(
             chain_id,
             trx.get("hash"),
-            trx.get("input"),
+            trx.get("input")
+        )
+
+        trx["input"] = input
+        trx["type"] = type
+
+        labels = decode_trx_function_selector(
+            chain_id,
+            trx.get("hash"),
+            input,
             trx.get("methodId"),
             trx.get("functionName")
         )
-        trx["input"] = input
         trx["labels"] = labels
     except Exception as e:
         logging.exception(
@@ -318,6 +325,24 @@ def create_trx(
 
     trx_obj = parse_obj_as(Trx, trx)
     return trx_obj.dict()
+
+
+def get_trx_input_and_type_from_web3(
+    chain_id: ChainId,
+    hash: str,
+    input: str = None
+):
+    try:
+        w3 = Chain(chainId=chain_id).w3
+        web3_trx = w3.eth.get_transaction(hash)
+        if web3_trx:
+            if input in [None, "0x", "deprecated", ""]:
+                input = web3_trx.get("input")
+            type = int(web3_trx.get("type"), 16)
+            return input, type
+        return input, None
+    except (requests.exceptions.HTTPError, requests.exceptions.TransactionNotFound):
+        return input, None
 
 
 def create_trx_tokens(
