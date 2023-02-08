@@ -340,8 +340,8 @@ def get_trx_input_and_type_from_web3(
                 input = web3_trx.get("input")
             if web3_trx.get("type"):
                 type = int(web3_trx.get("type"), 16)
-            return input, type
-        return input, None
+                return input, type
+            return input, None
     except (requests.exceptions.HTTPError, exceptions.TransactionNotFound):
         return input, None
 
