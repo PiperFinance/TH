@@ -212,7 +212,8 @@ def get_token_trxs_from_scanner(
                 res = res.json()
             if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
                 return res.get("result")
-        except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
+        except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError,
+                requests.exceptions.ConnectionError):
             continue
     return []
 
