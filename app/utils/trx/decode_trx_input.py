@@ -12,8 +12,6 @@ from schemas.request_schemas import FunctionSelectorSchema
 
 
 def decode_trx_function_selector(
-    chain_id: ChainId,
-    hash: str,
     input: str = None,
     method_id: str = None,
     function_name: str = None
@@ -47,7 +45,7 @@ def decode_trx_function_selector(
         if function_name not in ["", None] and method_id not in ["0x", None]:
             labels = save_and_create_function_selector(
                 method_id, function_name)
-    return input, labels
+    return labels
 
 
 def get_and_create_function_selector(

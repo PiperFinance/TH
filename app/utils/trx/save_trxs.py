@@ -302,8 +302,6 @@ def create_trx(
         trx["type"] = type
 
         labels = decode_trx_function_selector(
-            chain_id,
-            trx.get("hash"),
             input,
             trx.get("methodId"),
             trx.get("functionName")
