@@ -338,6 +338,7 @@ def get_trx_input_and_type_from_web3(
         if web3_trx:
             if input in [None, "0x", "deprecated", ""]:
                 input = web3_trx.get("input")
+            logging.info(f"TYPE = {web3_trx.get('type')}")
             type = int(web3_trx.get("type"), 16)
             return input, type
         return input, None
