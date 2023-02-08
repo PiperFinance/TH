@@ -77,17 +77,52 @@ def get_user_chain_token_trxs(
     start_block: int = 0
 ) -> List[Dict]:
 
-    if not start_block:
+    if start_block in [None, 0]:
         start_block = 0
 
-    result = get_token_trxs(
+        trx_count = get_user_chain_trx_count(
+            chain_id,
+            address
+        )
+        if trx_count == 0:
+            return None
+        if trx_count != None:
+            return return_token_trxs(
+                chain_id,
+                address,
+                trx_url,
+                start_block,
+                trx_count
+            )
+    return return_token_trxs(
         chain_id,
         address,
         trx_url,
-        start_block,
-        False
+        start_block
     )
-    if len(result) < 10000:
+
+
+def return_token_trxs(
+    chain_id: ChainId,
+    address: Address,
+    trx_url: str,
+    start_block: int = 0,
+    trx_count: int = None
+):
+    if trx_count == None:
+        result = get_token_trxs(
+            chain_id,
+            address,
+            trx_url,
+            start_block,
+            False
+        )
+        trx_count = len(result)
+
+    if trx_count == 0:
+        return None
+
+    if trx_count <= 10000:
         return result
 
     return get_token_trxs(
@@ -97,6 +132,28 @@ def get_user_chain_token_trxs(
         start_block,
         True
     )
+
+
+def get_user_chain_trx_count(
+    chain_id: ChainId,
+    address: Address
+):
+    chain = Chain(chainId=chain_id)
+    url = chain.url
+    api_keys = chain.api_keys
+
+    data = f"?module=proxy&action=eth_getTransactionCount&address={address}&tag=latest"
+
+    for api_key in api_keys:
+        try:
+            url = f"{url}{data}&apikey={api_key}"
+            with requests.request("GET", url=url) as res:
+                if res is not None and res.ok == True:
+                    res = res.json()
+                    return int(res.get("result"), 16)
+        except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
+            continue
+    return None
 
 
 def get_token_trxs(
@@ -116,7 +173,8 @@ def get_token_trxs(
         )
 
     result = []
-    for block_number in (start_block, 99999999, 10000):
+
+    for block_number in range(start_block, 99999999, 10000):
         result.extend(get_token_trxs_from_scanner(
             chain_id,
             address,
@@ -138,21 +196,11 @@ def get_token_trxs_from_scanner(
     url = chain.url
     api_keys = chain.api_keys
 
-    # data = {
-    #     "address": address,
-    #     "startblock": start_block,
-    #     "endblock": end_block,
-    #     "sort": "asc"
-    # }
-
     data = f"&address={address}&startblock={start_block}&endblock={end_block}&sort=asc"
 
     for api_key in api_keys:
         try:
-            # url = f"{url}{trx_url}{api_key}"
             url = f"{url}{trx_url}{data}&apikey={api_key}"
-
-            # with requests.request("POST", url=url, data=data) as res:
             with requests.request("GET", url=url) as res:
                 res = res.json()
             if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
