@@ -1,7 +1,7 @@
 import requests
 import logging
 from pymongo import errors
-from web3 import Web3
+from web3 import Web3, exceptions
 from zlib import crc32
 from pydantic import parse_obj_as
 from typing import List, Dict
@@ -341,7 +341,7 @@ def get_trx_input_and_type_from_web3(
             type = int(web3_trx.get("type"), 16)
             return input, type
         return input, None
-    except (requests.exceptions.HTTPError, requests.exceptions.TransactionNotFound):
+    except (requests.exceptions.HTTPError, exceptions.TransactionNotFound):
         return input, None
 
 
