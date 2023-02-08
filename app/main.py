@@ -29,6 +29,6 @@ async def app_boot():
     await redis_config.initialize(REDIS_URL)
     redis_config.isConnected()
     mongo_config.initialize(MONGO_URL)
-    from test_functions import _tt_
+    # from test_functions import _tt_
 
-    await _tt_()
+    # await _tt_()
