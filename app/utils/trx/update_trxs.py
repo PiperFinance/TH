@@ -2,6 +2,7 @@ import logging
 from typing import List
 
 from models import Trx, Label
+from .save_trxs import get_trx_input_and_type_from_web3
 from .decode_trx_input import decode_trx_function_selector
 from .get_trxs import get_users_token_trxs, get_users_chain_token_trxs
 from utils.types import Address, ChainId
@@ -37,7 +38,12 @@ def update_trxs(
     for trx in trxs:
         try:
             if not trx.labels:
-                input, labels = decode_trx_function_selector(
+                input, type = get_trx_input_and_type_from_web3(
+                    trx.chainId,
+                    trx.hash,
+                    trx.input
+                )
+                labels = decode_trx_function_selector(
                     trx.input,
                     None,
                     None
@@ -47,6 +53,7 @@ def update_trxs(
                     trx.chainId,
                     trx.hash,
                     input,
+                    type,
                     labels
                 )
         except Exception as e:
@@ -58,6 +65,7 @@ def update_trx(
     chain_id: ChainId,
     hash: str,
     input: str = None,
+    type: int = None,
     labels: List[Label] = None
 ):
     try:
@@ -65,6 +73,9 @@ def update_trx(
 
         if input:
             values["input"] = input
+
+        if type:
+            values["type"] = type
 
         if labels:
             label_list = []
