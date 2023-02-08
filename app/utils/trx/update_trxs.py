@@ -38,8 +38,6 @@ def update_trxs(
         try:
             if not trx.labels:
                 input, labels = decode_trx_function_selector(
-                    trx.chainId,
-                    trx.hash,
                     trx.input,
                     None,
                     None
