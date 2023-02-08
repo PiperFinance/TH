@@ -109,6 +109,9 @@ def return_token_trxs(
     start_block: int = 0,
     trx_count: int = None
 ):
+    if trx_count == 0:
+        return None
+
     if trx_count == None:
         result = get_token_trxs(
             chain_id,
@@ -117,13 +120,17 @@ def return_token_trxs(
             start_block,
             False
         )
-        trx_count = len(result)
-
-    if trx_count == 0:
-        return None
+        if len(result) <= 10000:
+            return result
 
     if trx_count <= 10000:
-        return result
+        return get_token_trxs(
+            chain_id,
+            address,
+            trx_url,
+            start_block,
+            False
+        )
 
     return get_token_trxs(
         chain_id,
