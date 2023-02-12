@@ -8,7 +8,7 @@ routes = APIRouter()
 
 
 @routes.get("/save_trxs_with_no_labels", response_model=BaseResponse)
-async def save_trxs_with_no_labels(
+async def save_trxs_with_no_label(
 ):
     try:
         save_all_trxs_with_no_labels()
