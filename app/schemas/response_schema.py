@@ -23,9 +23,15 @@ class TrxWithNoLabelsResult(BaseModel):
     count = Optional[int]
     trxs: Optional[List[TrxWithNoLabels]]
 
+    class Config:
+        arbitrary_types_allowed = True
+
 
 class TrxWithNoLabelsList(BaseResponse):
     result: Optional[TrxWithNoLabelsResult]
+
+    class Config:
+        arbitrary_types_allowed = True
 
 
 class FunctionSelectorResult(BaseModel):

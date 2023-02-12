@@ -9,8 +9,6 @@ class TrxWithNoLabels(BaseModel):
     hash: str
     chainIdHash: str
 
-    class Config:
-        arbitrary_types_allowed = True
 
     @classmethod
     def mongo_client(cls) -> MongoClient:
