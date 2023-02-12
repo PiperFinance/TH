@@ -1,7 +1,7 @@
 from typing import List, Optional, Any
 from pydantic import BaseModel
 
-from models import Trx, FunctionSelector
+from models import Trx, TrxWithNoLabels, FunctionSelector
 
 
 class BaseResponse(BaseModel):
@@ -17,6 +17,15 @@ class TrxResult(BaseModel):
 
 class TrxList(BaseResponse):
     result: Optional[TrxResult]
+
+
+class TrxWithNoLabelsResult(BaseModel):
+    count = Optional[int]
+    trxs: Optional[List[TrxWithNoLabels]]
+
+
+class TrxWithNoLabelsList(BaseResponse):
+    result: Optional[TrxWithNoLabelsResult]
 
 
 class FunctionSelectorResult(BaseModel):

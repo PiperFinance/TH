@@ -26,7 +26,7 @@ def client(
     return col
 
 
-def function_selector_client(
+def _client(
     class_name: str
 ):
     global _CLIENT

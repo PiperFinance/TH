@@ -22,3 +22,12 @@ class UsersChainData(BaseModel):
 class UsersData(BaseModel):
     chainIds: List[ChainId]
     userAddresses: List[Address]
+
+
+class TrxWithNoLabelsSchema(BaseModel):
+    chainId: ChainId
+    hash: str
+
+
+class TrxsWithNoLabelsSchema(BaseModel):
+    trxs: List[TrxWithNoLabelsSchema]

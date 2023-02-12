@@ -4,7 +4,7 @@ from enum import Enum
 from web3 import Web3
 from pydantic import BaseModel
 from typing import List, Optional, NamedTuple
-from configs.mongo_config import function_selector_client
+from configs.mongo_config import _client
 from utils.types import HexStr
 
 
@@ -113,6 +113,6 @@ class FunctionSelector(BaseModel):
 
     @classmethod
     def mongo_client(cls):
-        c = function_selector_client(cls.__name__)
+        c = _client(cls.__name__)
         c.create_index("hex", unique=True)
         return c
