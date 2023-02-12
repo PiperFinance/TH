@@ -9,7 +9,7 @@ routes = APIRouter()
 
 
 @routes.delete("/delete_trxs_with_no_labels", response_model=BaseResponse)
-async def delete_trxs_with_no_label(
+async def delete_trxs_with_no_labels(
     request: TrxsWithNoLabelsSchema
 ):
     try:

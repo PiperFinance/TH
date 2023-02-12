@@ -8,9 +8,9 @@ routes = APIRouter()
 
 
 @routes.get("/get_trxs_with_no_labels", response_model=TrxWithNoLabelsList)
-async def get_trxs_with_no_label(
+async def get_trxs_with_no_labels(
     pageSize: int,
-    pageNumber: int,
+    pageNumber: int
 ):
     try:
 
