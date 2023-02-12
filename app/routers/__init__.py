@@ -24,17 +24,24 @@ routers.include_router(
 
 
 routers.include_router(
-    save_trxs_with_no_labels.routes,
+    save_trxs.routes,
     tags=["Save Transaction"])
+
+
+routers.include_router(
+    get_trxs.routes,
+    tags=["Get Transaction"])
+
+
+routers.include_router(
+    save_trxs_with_no_labels.routes,
+    tags=["Save Transactions with no Labels"])
 
 
 routers.include_router(
     get_trxs_with_no_labels.routes,
     tags=["Get Transactions with no Labels"])
 
-routers.include_router(
-    save_trxs_with_no_labels.routes,
-    tags=["Save Transactions with no Labels"])
 
 routers.include_router(
     delete_trxs_with_no_labels.routes,
