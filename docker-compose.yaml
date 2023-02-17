@@ -2,17 +2,17 @@ version: "3.7"
 services:
 
   th:
-    hostname: th
-    container_name: th
-    image: th
+    hostname: test_th
+    container_name: test_th
+    image: test_th
     # restart: always
     build:
       context: ./app
     ports:
-      - 23456:23456
+      - 45678:45678
     environment:
       - DOMAIN=th.piper.finance
-      - PORT=23456
+      - PORT=45678
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_URL=redis://redis:6379
