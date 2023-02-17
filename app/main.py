@@ -6,7 +6,7 @@ from configs import redis_config, fastapi_config, mongo_config
 
 logging.basicConfig(level=logging.INFO)
 
-DOMAIN = os.getenv("DOMAIN") or "http://localhost:23456"
+DOMAIN = os.getenv("DOMAIN") or "http://localhost:56789"
 REDIS_URL = os.getenv("REDIS_URL") or "redis://localhost:6379"
 MONGO_URL = os.getenv("MONGO_URL") or "mongodb://localhost:27017/"
 
