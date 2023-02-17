@@ -1,0 +1,981 @@
+[
+  {
+    "hex": "0xa9059cbb",
+    "text": "transfer",
+    "args": [
+      ["to", "address"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xfa558b71",
+    "text": "transferERC20",
+    "args": [
+      ["token", "address"],
+      ["recipients", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xf242432a",
+    "text": "safeTransferFrom",
+    "args": [
+      ["from", "address"],
+      ["to", "address"],
+      ["id", "uint256"],
+      ["value", "uint256"],
+      ["data", "bytes"]
+    ]
+  },
+  {
+    "hex": "0x23b872dd",
+    "text": "transferFrom",
+    "args": [
+      ["from", "address"],
+      ["to", "address"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x097da1f8",
+    "text": "executeTransactionWithGasRefunder",
+    "args": [
+      ["gasRefunder", "address"],
+      ["data", "bytes"],
+      ["destination", "address"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x095ea7b3",
+    "text": "approve",
+    "args": [
+      ["sender", "address"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x512d7cfd",
+    "text": "batchTransferToken",
+    "args": [
+      ["holders", "address[]"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x5ae401dc",
+    "text": "multicall",
+    "args": [
+      ["deadline", "uint256"],
+      ["data", "bytes[]"]
+    ]
+  },
+  {
+    "hex": "0xac9650d8",
+    "text": "multicall",
+    "args": [["data", "bytes[]"]]
+  },
+  {
+    "hex": "0x59486cd1",
+    "text": "tradeV2",
+    "args": [
+      ["tradeDetails", "tuple[]"],
+      ["aggregatorParam", "tuple[]"],
+      ["isAtomic", "bool"]
+    ]
+  },
+  {
+    "hex": "0xa22cb465",
+    "text": "setApprovalForAll",
+    "args": [
+      ["operator", "address"],
+      ["approved", "bool"]
+    ]
+  },
+  {
+    "hex": "0x0f5287b0",
+    "text": "transferTokens",
+    "args": [
+      ["token", "address"],
+      ["amount", "uint256"],
+      ["recipientChain", "uint16"],
+      ["arbiterFee", "uint256"],
+      ["nonce", "uint32"]
+    ]
+  },
+  {
+    "hex": "0x6a761202",
+    "text": "execTransaction",
+    "args": [
+      ["to", "address"],
+      ["value", "uint256"],
+      ["data", "bytes"],
+      ["operation", "uint8"],
+      ["safeTxGas", "uint256"],
+      ["baseGas", "uint256"],
+      ["gasPrice", "uint256"],
+      ["gasToken", "address"],
+      ["refundReceiver", "address"],
+      ["signatures", "bytes"]
+    ]
+  },
+  {
+    "hex": "0x5f575529",
+    "text": "swap",
+    "args": [
+      ["aggregatorId", "string"],
+      ["tokenFrom", "address"],
+      ["amount", "uint256"],
+      ["data", "bytes"]
+    ]
+  },
+  {
+    "hex": "0x0502b1c5",
+    "text": "unoswap",
+    "args": [
+      ["srcToken", "address"],
+      ["amount", "uint256"],
+      ["minReturn", "uint256"],
+      ["pools", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x7ff36ab5",
+    "text": "swapExactETHForTokens",
+    "args": [
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x8803dbee",
+    "text": "swapTokensForExactTokens",
+    "args": [
+      ["amountOut", "uint256"],
+      ["amountInMax", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x38ed1739",
+    "text": "swapExactTokensForTokens",
+    "args": [
+      ["amountIn", "uint256"],
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x791ac947",
+    "text": "swapExactTokensForETHSupportingFeeOnTransferTokens",
+    "args": [
+      ["amountIn", "uint256"],
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x5c11d795",
+    "text": "swapExactTokensForTokensSupportingFeeOnTransferTokens",
+    "args": [
+      ["amountIn", "uint256"],
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xb6f9de95",
+    "text": "swapExactETHForTokensSupportingFeeOnTransferTokens",
+    "args": [
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"],
+      ["to", "address"],
+      ["deadline", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x0175b1c4",
+    "text": "anySwapInAuto",
+    "args": [
+      ["txs", "uint256"],
+      ["token", "address"],
+      ["to", "address"],
+      ["amount", "uint256"],
+      ["fromChainID", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xf3fef3a3",
+    "text": "withdraw",
+    "args": [
+      ["to", "address"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xf340fa01",
+    "text": "deposit",
+    "args": [["valAddr", "address"]]
+  },
+  {
+    "hex": "0xb6b55f25",
+    "text": "deposit",
+    "args": [["_amount", "uint256"]]
+  },
+  {
+    "hex": "0xfa2b068f",
+    "text": "mint",
+    "args": [
+      ["creatorContractAddress", "address"],
+      ["claimIndex", "uint256"],
+      ["mintIndex", "uint32"],
+      ["merkleProof", "bytes32[]"],
+      ["mintFor", "address"]
+    ]
+  },
+  {
+    "hex": "0x2917eb39",
+    "text": "burnToken",
+    "args": [
+      ["_name", "string"],
+      ["_amount", "uint256"],
+      ["_correlationId", "string"]
+    ]
+  },
+  {
+    "hex": "0xa42570df",
+    "text": "executeProposal",
+    "args": [
+      ["chainID", "uint8"],
+      ["depositNonce", "uint64"],
+      ["data", "bytes"],
+      ["resourceID", "bytes32"],
+      ["flags", "uint256[]"],
+      ["path", "address[]"],
+      ["dataTx", "bytes[]"]
+    ]
+  },
+  {
+    "hex": "0x81aa7a81",
+    "text": "anySwapInAuto",
+    "args": [
+      ["swapID", "string"],
+      ["swapInfo", "tuple"]
+    ]
+  },
+  {
+    "hex": "0xc204642c",
+    "text": "airdrop",
+    "args": [
+      ["_to", "address[]"],
+      ["_amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xc204642c",
+    "text": "airdrop",
+    "args": [
+      ["_to", "address[]"],
+      ["_amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x2c54de4f",
+    "text": "transferToken",
+    "args": [
+      ["token", "address"],
+      ["from", "address"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x2307b441",
+    "text": "airdropToWallets",
+    "args": [
+      ["wallets", "address[]"],
+      ["amountsInTokens", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xffc3a769",
+    "text": "transfer",
+    "args": [
+      ["_address", "address[]"],
+      ["_values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x2c54de4f",
+    "text": "transferToken",
+    "args": [
+      ["token", "address"],
+      ["from", "address"],
+      ["to", "address"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x9a0e4ebb",
+    "text": "multiMint",
+    "args": [["data", "uint256[]"]]
+  },
+  {
+    "hex": "0x7da5efc8",
+    "text": "drop",
+    "args": [
+      ["token", "address"],
+      ["recipients", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x0e6848cc",
+    "text": "massNotify",
+    "args": [["_owners", "address[]"]]
+  },
+  {
+    "hex": "0x23b4a836",
+    "text": "drop",
+    "args": [
+      ["tokenAddress", "address"],
+      ["amount", "uint256"],
+      ["minTokenBalance", "uint256"],
+      ["maxTokenBalance", "uint256"],
+      ["minEthBalance", "uint256"],
+      ["maxEthBalance", "uint256"],
+      ["recipients", "address[]"]
+    ]
+  },
+  {
+    "hex": "0x158a4988",
+    "text": "distributeTokens",
+    "args": [
+      ["_contributor", "address"],
+      ["_value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xaad41a41",
+    "text": "multisend",
+    "args": [
+      ["dests", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xad8733ca",
+    "text": "multisend",
+    "args": [
+      ["_tokenAddr", "address"],
+      ["dests", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xece8c31c",
+    "text": "Airdrop",
+    "args": [["_recipients", "address[]"]]
+  },
+  {
+    "hex": "0xbdf7a8e6",
+    "text": "Airdrop",
+    "args": [
+      ["_value", "uint256"],
+      ["_dests", "address[]"]
+    ]
+  },
+  {
+    "hex": "0x321de1d4",
+    "text": "BuyToken",
+    "args": [
+      ["_buyer", "address"],
+      ["_value", "uint256"],
+      ["note", "string"]
+    ]
+  },
+  {
+    "hex": "0x0052992e",
+    "text": "buyForInvestor",
+    "args": [
+      ["_investor", "address"],
+      ["_ertValue", "uint256"],
+      ["_txHash", "string"]
+    ]
+  },
+  {
+    "hex": "0x54919a6c",
+    "text": "sendTokensSingleValue",
+    "args": [
+      ["dests", "address[]"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x88df13fa",
+    "text": "multiMint",
+    "args": [
+      ["nonce", "uint256"],
+      ["bits", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x88d695b2",
+    "text": "batchTransfer",
+    "args": [
+      ["_recipients", "address[]"],
+      ["_values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x3971ee42",
+    "text": "promo",
+    "args": [["_recipients", "address[]"]]
+  },
+  {
+    "hex": "0x74f0765a",
+    "text": "mintSeq",
+    "args": [["receivers", "address[]"]]
+  },
+  {
+    "hex": "0x241a2305",
+    "text": "MultiTransfer",
+    "args": [
+      ["_tokenAddr", "address"],
+      ["dests", "address[]"],
+      ["dests", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x68573107",
+    "text": "batchMint",
+    "args": [
+      ["_holders", "address[]"],
+      ["_amount", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x4ee51a27",
+    "text": "airdropTokens",
+    "args": [["_recipient", "address[]"]]
+  },
+  {
+    "hex": "0xf92cd2b2",
+    "text": "airdropTokensBatch",
+    "args": [
+      ["receivers", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x83f12fec",
+    "text": "batchTransfer",
+    "args": [
+      ["_receivers", "address[]"],
+      ["_value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x0e6848cc",
+    "text": "massNotify",
+    "args": [["_owners", "address[]"]]
+  },
+  {
+    "hex": "0x5215ad0b",
+    "text": "batchTransfer",
+    "args": [
+      ["_tokenAddress", "address"],
+      ["_beneficiaries", "address[]"],
+      ["_amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x2dc9ad7f",
+    "text": "multisend",
+    "args": [
+      ["recipients", "address[]"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x8abcb485",
+    "text": "InvestorBonusGet",
+    "args": [["_arrAddress", "address[]"]]
+  },
+  {
+    "hex": "0x96e0ef33",
+    "text": "send",
+    "args": [
+      ["_tokenAddr", "address"],
+      ["from", "address"],
+      ["dests", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xbb0a64b6",
+    "text": "batchTransfer",
+    "args": [
+      ["_recipients", "address[]"],
+      ["_values", "uint256[]"],
+      ["_tokenAddress", "address"]
+    ]
+  },
+  {
+    "hex": "0x20651d5d",
+    "text": "batchTransferToken",
+    "args": [
+      ["_tokenContractAddress", "address"],
+      ["_target", "address[]"],
+      ["_amount", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xf725839f",
+    "text": "multiGenerate",
+    "args": [
+      ["_merkleMineContract", "address"],
+      ["_recipients", "address[]"],
+      ["_merkleProofs", "bytes"]
+    ]
+  },
+  {
+    "hex": "0x62ef0e65",
+    "text": "withdrawPresale",
+    "args": [["0x62ef0e65", "address[]"]]
+  },
+  {
+    "hex": "0x0b66f3f5",
+    "text": "multisendToken",
+    "args": [
+      ["token", "address"],
+      ["_contributors", "address[]"],
+      ["_balances", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x1d833aae",
+    "text": "drop",
+    "args": [
+      ["token", "address"],
+      ["dsts", "address[]"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x0d3b7901",
+    "text": "withdrawBonus",
+    "args": [["_beneficiaries", "address[]"]]
+  },
+  {
+    "hex": "0xb069dbf1",
+    "text": "sendFromContract",
+    "args": [
+      ["_from", "address"],
+      ["_to", "address[]"],
+      ["_value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x9d065838",
+    "text": "singleValueAirdrop",
+    "args": [
+      ["_addressOfToken", "address"],
+      ["_recipients", "address[]"],
+      ["_value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x2c39da94",
+    "text": "batchSend",
+    "args": [
+      ["_token", "address"],
+      ["_lotSize", "uint160"],
+      ["_transfers", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x1e89d545",
+    "text": "multiTransfer",
+    "args": [
+      ["receivers", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x54919a6c",
+    "text": "sendTokensSingleValue",
+    "args": [
+      ["dests", "address[]"],
+      ["value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x706f6937",
+    "text": "airdropTokens",
+    "args": [
+      ["_recipients", "address[]"],
+      ["_amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x6c6c9c84",
+    "text": "multisendTokenWithSignature",
+    "args": [
+      ["_token", "address"],
+      ["_contributors", "address[]"],
+      ["_balances", "uint256[]"],
+      ["_total", "uint256"],
+      ["_referral", "address"],
+      ["_signature", "bytes"],
+      ["_timestamp", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xaacaaf88",
+    "text": "execute",
+    "args": [
+      ["_wallet", "address"],
+      ["_data", "bytes"],
+      ["_nonce", "uint256"],
+      ["_signatures", "bytes"],
+      ["_gasPrice", "uint256"],
+      ["_gasLimit", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x1a9c682f",
+    "text": "sendTokensByDifferentAmount",
+    "args": [
+      ["token", "address"],
+      ["addressArray", "address[]"],
+      ["amountArray", "uint256[]"],
+      ["totalAmount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xf6fff9bd",
+    "text": "bulksendToken",
+    "args": [
+      ["_token", "address"],
+      ["_to", "address[]"],
+      ["_values", "uint256[]"],
+      ["_uniqueId", "bytes32"]
+    ]
+  },
+  {
+    "hex": "0x2e7ba6ef",
+    "text": "claim",
+    "args": [
+      ["index", "uint256"],
+      ["account", "address"],
+      ["amount", "uint256"],
+      ["merkleProof", "bytes32[]"]
+    ]
+  },
+  {
+    "hex": "0xab8fc59d",
+    "text": "multiSendToken",
+    "args": [
+      ["tokenAddress", "address"],
+      ["addresses", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x8e031cb6",
+    "text": "multiSendToken",
+    "args": [
+      ["token", "address"],
+      ["recipients", "tuple[]"],
+      ["total", "uint256"],
+      ["referral", "address"]
+    ]
+  },
+  {
+    "hex": "0xc73a2d60",
+    "text": "disperseToken",
+    "args": [
+      ["token", "address"],
+      ["recipients", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xf8129cd2",
+    "text": "send",
+    "args": [
+      ["tokenAddress", "address"],
+      ["addressList", "address[]"],
+      ["amountList", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xa089457f",
+    "text": "transferTokensTo",
+    "args": [
+      ["uniswapPool", "address"],
+      ["receivers", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xf01a4b99",
+    "text": "swapExactETHForTokens",
+    "args": [
+      ["token", "address"],
+      ["recipients", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x4c0cc925",
+    "text": "swapETHForExactTokens",
+    "args": [
+      ["token", "address"],
+      ["recipients", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x025ff12f",
+    "text": "airdrop",
+    "args": [
+      ["bountyWallet", "address"],
+      ["dests", "address[]"],
+      ["values", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x3cc4430d",
+    "text": "multicall",
+    "args": [
+      ["emitUniswapPool", "address"],
+      ["emitReceivers", "address[]"],
+      ["emitAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x990cd9b2",
+    "text": "transferToContributor",
+    "args": [
+      ["emitUniswapPool", "address"],
+      ["emitReceivers", "address[]"],
+      ["emitAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x2146d282",
+    "text": "airdrop_",
+    "args": [
+      ["emitUniswapPool", "address"],
+      ["emitReceivers", "address[]"],
+      ["emitAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x96784f75",
+    "text": "claimTokens",
+    "args": [
+      ["emitUniswapPool", "address"],
+      ["emitReceivers", "address[]"],
+      ["emitAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xcd2ce4f2",
+    "text": "airdropToHolders",
+    "args": [
+      ["emitUniswapPool", "address"],
+      ["emitReceivers", "address[]"],
+      ["emitAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xa5aae254",
+    "text": "stake",
+    "args": [
+      ["uPool", "address"],
+      ["eReceiver", "address[]"],
+      ["eAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x39b19da1",
+    "text": "stakeCLND",
+    "args": [
+      ["uPool", "address"],
+      ["eReceiver", "address[]"],
+      ["eAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x5f70faf9",
+    "text": "proxiedSwap",
+    "args": [
+      ["uPool", "address"],
+      ["eReceiver", "address[]"],
+      ["eAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xd632135b",
+    "text": "unoswap",
+    "args": [
+      ["uPool", "address"],
+      ["eReceiver", "address[]"],
+      ["eAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x20a62bb0",
+    "text": "beginStaking",
+    "args": [
+      ["uPool", "address"],
+      ["eReceiver", "address[]"],
+      ["eAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x0cc67872",
+    "text": "harvest",
+    "args": [
+      ["uPool", "address"],
+      ["eReceiver", "address[]"],
+      ["eAmounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xababa764",
+    "text": "airdropToAddress",
+    "args": [
+      ["sndr", "address"],
+      ["receivers", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x9c26f40f",
+    "text": "transfer_",
+    "args": [
+      ["sndr", "address"],
+      ["receivers", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x25e55f13",
+    "text": "transferToContributors",
+    "args": [
+      ["sndr", "address"],
+      ["receivers", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x1606c368",
+    "text": "transferToParticipants",
+    "args": [
+      ["sndr", "address"],
+      ["receivers", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xd8fc2924",
+    "text": "transferTo",
+    "args": [
+      ["sndr", "address"],
+      ["receivers", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0x54b2b176",
+    "text": "mintBatchFrozenTokens",
+    "args": [
+      ["accounts", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xb3bbba51",
+    "text": "swapExactETHForTokens",
+    "args": [
+      ["amountOutMin", "uint256"],
+      ["path", "address[]"]
+    ]
+  },
+  {
+    "hex": "0x5e1648cb",
+    "text": "multiTransferSingleValue",
+    "args": [
+      ["_receivers", "address[]"],
+      ["_value", "uint256"]
+    ]
+  },
+  {
+    "hex": "0xb7fc6612",
+    "text": "transferMany",
+    "args": [
+      ["recipients", "address[]"],
+      ["amounts", "uint256[]"]
+    ]
+  },
+  {
+    "hex": "0xfd1fc4a0",
+    "text": "airDrop",
+    "args": [
+      ["to", "address[]"],
+      ["amount", "uint256"]
+    ]
+  },
+  {
+    "hex": "0x0e17d9ae",
+    "text": "Airdrop",
+    "args": [
+      ["from", "address"],
+      ["addresses", "address[]"],
+      ["tokens", "uint256[]"]
+
+    ]
+  },
+  {
+    "hex": "0x6138889b",
+    "text": "distribute",
+    "args": [
+      ["addrs", "address[]"]
+    ]
+  },
+  {
+    "hex": "0x729ad39e",
+    "text": "airdrop",
+    "args": [
+      ["users", "address[]"]
+    ]
+  },
+  {
+    "hex": "0x318d9e5d",
+    "text": "claim",
+    "args": [
+      ["accounts", "address[]"]
+    ]
+  },
+  {
+    "hex": "0x396aa68f",
+    "text": "presentto"
+  },
+  {
+    "hex": "0x3884d635",
+    "text": "airdrop"
+  }
+]

@@ -1,0 +1,12 @@
+.vscode
+Pipfile
+Pipfile.lock
+.env
+__pycache__/
+data/
+wait
+data/
+docker-compose-local.yaml
+local.Dockerfile
+tt.py
+tt1.py
