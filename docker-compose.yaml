@@ -29,7 +29,7 @@ services:
 networks:
   default:
     driver: bridge
-    name: th_default
+    name: test_th_default
   redis_db:
     external:
       name: redis_db
