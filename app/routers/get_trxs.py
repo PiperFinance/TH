@@ -23,6 +23,7 @@ async def get_users_chain_trxs(
     userAddress: List[Address] or None = Query(default=None)
 ):
     try:
+        logging.info("Hey i'm geting.")
         trx_len = get_users_chain_token_trxs_len(chainId, userAddress)
 
         skip = pageSize * (pageNumber - 1)
@@ -48,6 +49,7 @@ async def get_users_trxs(
     userAddress: List[Address] or None = Query(default=None)
 ):
     try:
+        logging.info("Hey i'm geting.")
         trx_len = get_users_token_trxs_len(chainId, userAddress)
 
         skip = pageSize * (pageNumber - 1)

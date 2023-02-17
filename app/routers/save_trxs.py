@@ -20,6 +20,7 @@ routes = APIRouter()
 async def save_users_chain_trxs(
     request: UsersChainData
 ):
+    logging.info("Hey i'm saving.")
     check_chain(request.chainId)
     try:
         update_users_chain_token_trxs(
@@ -39,6 +40,7 @@ async def save_users_chain_trxs(
 async def save_users_trxs(
     request: UsersData
 ):
+    logging.info("Hey i'm saving.")
     check_chains(request.chainIds)
     try:
         update_users_token_trxs(
