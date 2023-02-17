@@ -1,7 +1,7 @@
 version: "3.7"
 services:
 
-  th:
+  testnet_th:
     hostname: test_th
     container_name: test_th
     image: test_th
@@ -11,7 +11,7 @@ services:
     ports:
       - 56789:56789
     environment:
-      - DOMAIN=th.piper.finance
+      - DOMAIN=testnet_th.piper.finance
       - PORT=45678
       - REDIS_HOST=redis
       - REDIS_PORT=56789
