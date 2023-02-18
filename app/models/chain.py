@@ -15,7 +15,7 @@ class Chain(BaseModel):
 
     @property
     def url(self) -> Url:
-        return constants.chains[self.chainId]["apiEndpoint"]
+        return constants.chains[self.chainId]["apiEndPoint"]
 
     @property
     def api_keys(self) -> List[ApiKey]:
