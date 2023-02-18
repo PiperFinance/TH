@@ -13,3 +13,4 @@ RUN pip install pyyaml
 COPY ./ ./
 
 ENV TIMEOUT=36000
+ENV MAX_WORKERS=12
