@@ -159,6 +159,7 @@ def get_user_chain_trx_count(
                     res = res.json()
                     return int(res.get("result"), 16)
         except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
+            logging.info(f"This is result: {res.get('result')}")
             continue
     return None
 
