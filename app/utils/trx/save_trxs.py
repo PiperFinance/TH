@@ -146,10 +146,10 @@ def get_user_chain_trx_count(
     address: Address
 ):
     chain = Chain(chainId=chain_id)
-    url = chain.url
+    chain_url = chain.url
     api_keys = chain.api_keys
 
-    url = f"{url}?module=proxy&action=eth_getTransactionCount&address={address}&tag=latest"
+    url = f"{chain_url}?module=proxy&action=eth_getTransactionCount&address={address}&tag=latest"
 
     for api_key in api_keys:
         try:
