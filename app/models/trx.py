@@ -2,6 +2,13 @@ from enum import Enum
 import pymongo
 from pydantic import BaseModel
 from typing import List, Optional, Any, Union
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    relationship
+)
 
 from . import Chain
 from .token import Token
@@ -60,3 +67,35 @@ class Trx(Chain):
         c.create_index("hash", unique=True)
         c.create_index([("timeStamp", pymongo.DESCENDING)], background=True)
         return c
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class Trx(Base, Chain):
+    __tablename__: "Trx"
+
+    userAddress: Mapped[Address]
+    chainIdUserAddress: Mapped[str] = mapped_column(primary_key=True)
+    type: Mapped[Optional[int]]
+    labels: Mapped[Optional[List["Label"]]]
+    tokens: Mapped[Optional[List["Token"]]]
+    blockNumber: StringBlockNumber
+    timeStamp: Mapped[int]
+    hash: Mapped[str]
+    nonce: Mapped[str]
+    blockHash: Mapped[str]
+    fromAddress: Mapped[Address]
+    contractAddress: Mapped[Optional[str]]
+    to: Mapped[Union[Address, str]]
+    value: Mapped[str]
+    transactionIndex: Mapped[str]
+    gas: Mapped[str]
+    gasPrice: Mapped[str]
+    gasUsed: Mapped[str]
+    cumulativeGasUsed: Mapped[str]
+    input: Mapped[Optional[str]]
+    confirmations: Mapped[str]
+    isError: Mapped[Optional[str]]
+    txreceipt_status: Mapped[Optional[str]]
