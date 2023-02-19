@@ -163,7 +163,7 @@ def get_user_chain_trx_count(
             return int(res.get("result"), 16)
         except Exception as e:
             logging.exception(
-                f"{e} -------------------------> This is result: {res.get('result')}")
+                f"{e} -------------------------> This is result: {res}")
             continue
     return None
 
