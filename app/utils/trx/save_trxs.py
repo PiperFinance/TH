@@ -159,6 +159,7 @@ def get_user_chain_trx_count(
                     res = res.json()
                     if res.get("error") is not None or res.get("status") == 0:
                         return None
+                return None
         except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
             continue
         try:
