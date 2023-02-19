@@ -149,11 +149,11 @@ def get_user_chain_trx_count(
     url = chain.url
     api_keys = chain.api_keys
 
-    data = f"?module=proxy&action=eth_getTransactionCount&address={address}&tag=latest"
+    url = f"{url}?module=proxy&action=eth_getTransactionCount&address={address}&tag=latest"
 
     for api_key in api_keys:
         try:
-            url = f"{url}{data}&apikey={api_key}"
+            url = f"{url}&apikey={api_key}"
             with requests.request("GET", url=url) as res:
                 if res is not None and res.ok == True:
                     res = res.json()
@@ -164,7 +164,7 @@ def get_user_chain_trx_count(
         except Exception as e:
             logging.exception(
                 f"{e} -------------------------> This is result: {res}")
-            continue
+            return None
     return None
 
 
