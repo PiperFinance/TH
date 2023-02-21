@@ -160,7 +160,9 @@ def get_user_chain_trx_count(
                     if res.get("error") is not None or res.get("status") == 0:
                         return None
                 return None
-        except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError):
+        except (requests.exceptions.JSONDecodeError, requests.exceptions.ConnectionError,
+            requests.exceptions.ConnectTimeout, requests.exceptions.SSLError,
+            requests.exceptions.ReadTimeout):
             continue
         try:
             return int(res.get("result"), 16)
@@ -220,8 +222,9 @@ def get_token_trxs_from_scanner(
                 res = res.json()
             if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
                 return res.get("result")
-        except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError,
-                requests.exceptions.ConnectionError):
+        except (requests.exceptions.JSONDecodeError, requests.exceptions.ConnectionError,
+            requests.exceptions.ConnectTimeout, requests.exceptions.SSLError,
+            requests.exceptions.ReadTimeout):
             continue
     return []
 

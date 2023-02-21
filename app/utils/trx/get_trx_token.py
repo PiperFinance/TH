@@ -77,7 +77,9 @@ def get_token_price(chain_id: ChainId, token_id: int):
             if res.text == '':
                 return None
             res = np.format_float_positional(float(res.text), trim='-')
-    except (requests.exceptions.ConnectionError, requests.exceptions.ReadTimeout):
+    except (requests.exceptions.JSONDecodeError, requests.exceptions.ConnectionError,
+            requests.exceptions.ConnectTimeout, requests.exceptions.SSLError,
+            requests.exceptions.ReadTimeout):
         return None
 
 
