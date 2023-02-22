@@ -150,7 +150,7 @@ def get_user_chain_trx_count(
     api_keys = chain.api_keys
 
     data = f"?module=proxy&action=eth_getTransactionCount&address={address}&tag=latest"
-    
+
     if None in api_keys:
         try:
             url = f"{url}{data}"
@@ -214,7 +214,7 @@ def get_token_trxs_from_scanner(
     api_keys = chain.api_keys
 
     data = f"&address={address}&startblock={start_block}&endblock={end_block}&sort=asc"
-    
+
     if None in api_keys:
         try:
             url = f"{url}{trx_url}{data}"
@@ -230,10 +230,16 @@ def get_token_trxs_from_scanner(
         for api_key in api_keys:
             try:
                 url = f"{url}{trx_url}{data}&apikey={api_key}"
+                logging.info(
+                    f"This is URL ----------------------------------> {url}")
                 with requests.request("GET", url=url) as res:
                     res = res.json()
+                    logging.info(
+                        f"This is res.json -------------------------------------> {res}")
                 if res is not None and (res.get("message") == "OK" or res.get("message") == "No transactions found"):
                     return res.get("result")
+                    logging.info(
+                        f"This is result -------------------------------------> {res.get('result')}")
             except (requests.exceptions.JSONDecodeError, requests.exceptions.SSLError,
                     requests.exceptions.ConnectionError):
                 continue
