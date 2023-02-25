@@ -13,6 +13,11 @@ async def _tt_():
     # save_users_chain_token_trxs(
     #     56, ["0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1"])
 
+    # save_users_chain_token_trxs(
+    #     56, ["0xB49F17514D6F340d7bcdFfC47526C9A3713697e0"])
+    
+    
+
     # update_users_token_trxs(
     #     [1],
     #     ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"]

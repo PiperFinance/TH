@@ -16,17 +16,16 @@ def decode_trx_function_selector(
     method_id: str = None,
     function_name: str = None
 ):
-    labels = None
+    # labels = None
     if input not in ["deprecated", "0x", "", None]:
         function_selector, labels = get_and_create_function_selector(input)
         if function_selector:
             if function_selector.args:
-                labels = create_function_selector_args(
+                return create_function_selector_args(
                     input,
                     labels,
                     function_selector.args
                 )
-
         else:
             if function_name not in ["", None] and method_id not in ["0x", None]:
                 labels, args = save_and_create_function_selector(
@@ -34,18 +33,27 @@ def decode_trx_function_selector(
                     function_name
                 )
 
-                if args != []:
-                    labels = create_function_selector_args(
-                        input,
-                        labels,
-                        args
-                    )
-
+                if args in [[], None]:
+                    return labels
+                return create_function_selector_args(
+                    input,
+                    labels,
+                    args
+                )
+            else:
+                labels, args = save_and_create_function_selector_openchain(
+                    input)
+                if args in [[], None]:
+                    return labels
+                return create_function_selector_args(
+                    input,
+                    labels,
+                    args
+                )
     else:
         if function_name not in ["", None] and method_id not in ["0x", None]:
-            labels = save_and_create_function_selector(
+            return save_and_create_function_selector(
                 method_id, function_name)
-    return labels
 
 
 def get_and_create_function_selector(
@@ -170,3 +178,53 @@ def create_function_selector_args(
             logging.exception(e)
 
     return labels
+
+
+def save_and_create_function_selector_openchain(input: str):
+    method_id = input[:10]
+
+    url = f"https://api.openchain.xyz/signature-database/v1/lookup?filter=false&function={method_id}"
+
+    with requests.request("GET", url=url) as function:
+        function = function.json()
+        if function.get("ok") != True:
+            return None, None
+        if not function.get("result").get("function").get(method_id):
+            return None, None
+
+    function = function.get("result").get(
+        "function").get(method_id)[0].get("name")
+    function_name = function.split("(")[0]
+
+    labels = [parse_obj_as(Label, {
+        "title": "function",
+        "value": function_name
+    })]
+
+    function_selector = {
+        "hex": method_id,
+        "text": function_name,
+    }
+
+    args = []
+    _args = function.split("(")[1]
+    _args = _args.split(")")[0]
+    if _args != '':
+        try:
+            for arg in _args.split(","):
+                args.append(
+                    [
+                        "",
+                        ArgType.convert(arg)
+                    ]
+                )
+        except Exception as e:
+            logging.exception(f"{e} -----------> {arg}")
+    if args != []:
+        function_selector["args"] = args
+
+    function_selector = parse_obj_as(
+        FunctionSelectorSchema, function_selector)
+    save_function_selector(function_selector)
+
+    return labels, args
