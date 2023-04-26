@@ -4,6 +4,6 @@ redis
 pymongo 
 odmantic 
 requests 
-web3 
+web3<6.0.0 
 python-dotenv 
 numpy
