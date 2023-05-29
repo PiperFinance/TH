@@ -5,7 +5,7 @@ services:
     hostname: th
     container_name: th
     image: th
-    # restart: always
+    restart: always
     build:
       context: ./app
     ports:
