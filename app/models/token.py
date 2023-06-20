@@ -41,3 +41,7 @@ class Token(BaseModel):
 
     def __hash__(self):
         return hash("-".join([self.detail.address.lower(), str(self.detail.chainId)]))
+
+    def __json__(self):
+        self.detail = self.detail.json()
+        return json(self)

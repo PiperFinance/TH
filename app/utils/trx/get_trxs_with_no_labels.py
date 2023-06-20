@@ -1,49 +1,31 @@
 import logging
 from pydantic import parse_obj_as
 from typing import List, Dict
+from sqlmodel import select
 
-from models import TrxWithNoLabels
-from .get_trxs import create_trx_objects
+from models import TrxWithNoLabels, FunctionSelector
+# from .get_trxs import create_trx_objects
+from configs.postgres_config import InitializePostgres
 
 
 def get_all_trxs_with_no_labels(
     skip: int = 0,
     limit: int = 0
 ):
-    client = TrxWithNoLabels.mongo_client()
-    try:
-        trxs = list(client.find())
+    ps = InitializePostgres()
+    with ps.session as session:
+        statement = select(FunctionSelector)
+        results = session.exec(statement)
+        trxs = results.all()
         trxs_len = len(trxs)
-    except Exception as e:
-        logging.exception(e)
-        return None, None
 
-    if limit < 1:
-        trxs = trxs
+    if limit >= 1 and skip >= 1:
+        trxs = trxs[skip:skip + limit]
 
-    if skip < 1:
-        try:
-            trxs = list(client.find().limit(limit))
-        except Exception as e:
-            logging.exception(e)
-            return None, None
+    elif skip < 1 and limit >= 1:
+        with ps.session as session:
+            statement = select(FunctionSelector).limit(limit)
+            results = session.exec(statement)
+            trxs = results.all()
 
-    else:
-        try:
-            trxs = list(client.find().skip(skip).limit(limit))
-        except Exception as e:
-            logging.exception(e)
-            return None, None
-
-    if trxs in [None, []]:
-        return None, 0
-
-    trxs = create_trx_with_no_labels_objects(trxs)
     return trxs, trxs_len
-
-
-def create_trx_with_no_labels_objects(trxs: List[Dict]):
-    trx_objs = []
-    for trx in trxs:
-        trx_objs.append(parse_obj_as(TrxWithNoLabels, trx))
-    return trx_objs

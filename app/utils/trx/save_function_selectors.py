@@ -1,3 +1,4 @@
+import  json
 import logging
 from pymongo import errors
 from pydantic import parse_obj_as
@@ -5,24 +6,22 @@ from typing import List
 
 from models import FunctionSelector, ArgType
 from schemas.request_schemas import FunctionSelectorSchema
-from utils.types import MongoClient
+from configs.postgres_config import InitializePostgres
 
 
 def save_function_selectors(function_selectors: List[FunctionSelectorSchema]):
-    client = FunctionSelector.mongo_client()
     for function_selector in function_selectors:
         try:
             function_selector = make_function_selector_obj(function_selector)
-            insert_function_selector(client, function_selector)
+            insert_function_selector(function_selector)
         except Exception as e:
             logging.exception(e)
             continue
 
 
 def save_function_selector(function_selector: FunctionSelectorSchema):
-    client = FunctionSelector.mongo_client()
     function_selector = make_function_selector_obj(function_selector)
-    insert_function_selector(client, function_selector)
+    insert_function_selector(function_selector)
 
 
 def make_function_selector_obj(function_selector: FunctionSelectorSchema):
@@ -33,7 +32,7 @@ def make_function_selector_obj(function_selector: FunctionSelectorSchema):
             args = []
             for arg in function_selector.get("args"):
                 args.append((arg[0], ArgType.convert(arg[1])))
-            function_selector["args"] = args
+            function_selector["args"] = json.dumps(args)
 
         function_selector = parse_obj_as(
             FunctionSelector, function_selector)
@@ -42,13 +41,14 @@ def make_function_selector_obj(function_selector: FunctionSelectorSchema):
         logging.exception(e)
         return None
 
-
 def insert_function_selector(
-    client: MongoClient,
     function_selector: FunctionSelector
 ):
-    try:
-        function_selector = function_selector.dict()
-        client.insert_one(function_selector)
-    except errors.DuplicateKeyError:
-        return
+    ps = InitializePostgres()
+    with ps.session as session:
+        try:
+            session.add(function_selector)
+            session.commit()
+        except Exception as e:
+            logging.exception(e)
+            return

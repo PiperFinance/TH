@@ -1,12 +1,13 @@
 import logging
 from typing import List
+from sqlmodel import select
 
 from models import Trx, Label
 from .save_trxs import get_trx_input_and_type_from_web3
 from .decode_trx_input import decode_trx_function_selector
-from .get_trxs import get_users_token_trxs, get_users_chain_token_trxs
+from .get_trxs import get_users_token_trxs
 from utils.types import Address, ChainId
-
+from configs.postgres_config import InitializePostgres
 
 def update_users_token_trxs(
     chain_ids: List[ChainId],
@@ -14,18 +15,6 @@ def update_users_token_trxs(
 ):
 
     trxs = get_users_token_trxs(chain_ids, addresses)
-    if trxs in [[], None]:
-        return
-
-    update_trxs(trxs)
-
-
-def update_users_chain_token_trxs(
-    chain_id: ChainId,
-    addresses: List[Address]
-):
-
-    trxs = get_users_chain_token_trxs(chain_id, addresses)
     if trxs in [[], None]:
         return
 
@@ -50,7 +39,6 @@ def update_trxs(
                 )
 
                 update_trx(
-                    trx.chainId,
                     trx.hash,
                     input,
                     type,
@@ -60,36 +48,34 @@ def update_trxs(
             logging.exception(e)
             continue
 
-
 def update_trx(
-    chain_id: ChainId,
     hash: str,
     input: str = None,
     type: int = None,
     labels: List[Label] = None
 ):
-    try:
-        values = dict()
+    if not input and not type and not labels:
+        return
 
-        if input:
-            values["input"] = input
+    ps = InitializePostgres()
+    with ps.session as session:
+        try:
+            statement = select(Trx).where(Trx.hash == hash)
+            results = session.exec(statement)
+            trx = results.one()
 
-        if type:
-            values["type"] = type
+            if input:
+                trx.input = input
 
-        if labels:
-            label_list = []
-            for label in labels:
-                label_list.append(label.dict())
-            values["labels"] = label_list
+            if type:
+                trx.type = type
 
-        if len(values) < 1:
-            return
+            if labels:
+                trx.labels = labels
 
-        client = Trx.mongo_client(chain_id)
-        query = {"hash": hash}
-        newvalues = {"$set": values}
+            session.add(trx)
+            session.commit()
+            session.refresh(trx)
 
-        client.update_one(query, newvalues)
-    except Exception as e:
-        logging.exception(e)
+        except Exception as e:
+            logging.exception(e)

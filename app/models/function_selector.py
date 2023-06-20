@@ -2,7 +2,7 @@ import re
 import logging
 from enum import Enum
 from web3 import Web3
-from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
 from typing import List, Optional, NamedTuple
 from configs.mongo_config import _client
 from utils.types import HexStr
@@ -101,18 +101,12 @@ class Arg(NamedTuple):
     type: ArgType
 
 
-class FunctionSelector(BaseModel):
-    hex: HexStr
+class FunctionSelector(SQLModel, table=True):
+    hex: str = Field(primary_key=True)
     text: str
-    args: Optional[List[Arg]]
+    args: Optional[str]
 
-    def dict(self, *a, **kwd):
-        if self.args:
-            self.args = [(_.title, _.type.value) for _ in self.args]
-        return super().dict(*a, **kwd)
-
-    @classmethod
-    def mongo_client(cls):
-        c = _client(cls.__name__)
-        c.create_index("hex", unique=True)
-        return c
+    # def dict(self, *a, **kwd):
+    #     if self.args:
+    #         self.args = [(_.title, _.type.value) for _ in self.args]
+    #     return super().dict(*a, **kwd)

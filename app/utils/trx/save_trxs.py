@@ -1,12 +1,14 @@
 import requests
 import logging
+import json
+import psycopg2
 from pymongo import errors
 from web3 import Web3, exceptions
 from zlib import crc32
 from pydantic import parse_obj_as
 from typing import List, Dict
 
-from models import Trx, Chain, TrxType, token
+from models import Trx, Chain, TrxType, token, Label
 from .decode_trx_input import decode_trx_function_selector
 from .get_trx_token import (
     get_trx_token,
@@ -18,6 +20,7 @@ from utils.sync_redis import (
     get_last_block_number
 )
 from utils.types import Address, ChainId
+from configs.postgres_config import InitializePostgres
 
 
 def save_users_token_trxs(
@@ -43,6 +46,7 @@ def save_user_chain_token_trxs(
     trxs = dict()
     for trx_type in TrxType:
         start_block = get_last_block_number(chain_id, address, trx_type.value)
+        # start_block = 0
 
         trx_url = trx_type.url
 
@@ -65,7 +69,6 @@ def save_user_chain_token_trxs(
         trxs
     )
     insert_trxs(
-        chain_id,
         trxs
     )
 
@@ -120,7 +123,7 @@ def return_token_trxs(
             start_block,
             False
         )
-        if len(result) <= 10000:
+        if len(result) < 10000:
             return result
 
     if trx_count <= 10000:
@@ -137,7 +140,8 @@ def return_token_trxs(
         address,
         trx_url,
         start_block,
-        True
+        True,
+        trx_count
     )
 
 
@@ -145,7 +149,7 @@ def get_user_chain_trx_count(
     chain_id: ChainId,
     address: Address
 ):
-    chain = Chain(chainId=chain_id)
+    chain = Chain(id=chain_id)
     url = chain.url
     api_keys = chain.api_keys
 
@@ -169,7 +173,8 @@ def get_token_trxs(
     address: Address,
     trx_url: str,
     start_block: int,
-    chunk: bool = False
+    chunk: bool = False,
+    trx_count: int = None
 ):
     if not chunk or (start_block + 10000) > 99999999:
         return get_token_trxs_from_scanner(
@@ -182,6 +187,16 @@ def get_token_trxs(
 
     result = []
 
+    if trx_count:
+        return get_trxs_recursively(
+            chain_id,
+            address,
+            trx_url,
+            trx_count,
+            result,
+            start_block
+        )
+
     for block_number in range(start_block, 99999999, 10000):
         result.extend(get_token_trxs_from_scanner(
             chain_id,
@@ -190,7 +205,93 @@ def get_token_trxs(
             start_block,
             block_number
         ))
+        start_block = start_block + 10000
+
     return result
+
+
+def get_trxs_recursively(
+    chain_id: ChainId,
+    address: Address,
+    trx_url: str,
+    trx_count: int,
+    result: List,
+    start_block: int,
+    end_block: int = 100000
+):
+    # if trx_count - len(result) > 10000:
+
+    # for end_block in (10000000, 99999999, 10000000):
+    new_end_block, new_result = get_trxs_from_scanner_recursively(
+        chain_id,
+        address,
+        trx_url,
+        start_block,
+        end_block
+    )
+    result.extend(new_result)
+
+    if len(result) == trx_count:
+        return result
+
+    new_result = get_trxs_from_scanner_recursively(
+        chain_id,
+        address,
+        trx_url,
+        end_block,
+        new_end_block
+    )
+    result.extend(new_result)
+
+    #     get_trxs_recursively(
+    #         chain_id,
+    #         address,
+    #         trx_url,
+    #         trx_count,
+    #         result,
+    #         start_block,
+    #         end_block * 2
+    #     )
+    # else:
+    #     result.extend(get_token_trxs_from_scanner(
+    #         chain_id,
+    #         address,
+    #         trx_url,
+    #         start_block,
+    #         99999999
+    #     ))
+
+    # return result
+
+
+def get_trxs_from_scanner_recursively(
+    chain_id,
+    address,
+    trx_url,
+    start_block,
+    end_block
+):
+    end_block = end_block + start_block
+
+    result = get_token_trxs_from_scanner(
+        chain_id,
+        address,
+        trx_url,
+        start_block,
+        end_block
+    )
+    if len(result) < 10000:
+        return end_block, result
+
+    end_block = end_block // 2
+
+    return end_block, get_trxs_from_scanner_recursively(
+        chain_id,
+        address,
+        trx_url,
+        start_block,
+        end_block
+    )
 
 
 def get_token_trxs_from_scanner(
@@ -200,7 +301,7 @@ def get_token_trxs_from_scanner(
     start_block: int = 0,
     end_block: int = 99999999
 ):
-    chain = Chain(chainId=chain_id)
+    chain = Chain(id=chain_id)
     url = chain.url
     api_keys = chain.api_keys
 
@@ -234,12 +335,12 @@ def create_trxs(
                     chain_id,
                     address,
                     trx)
-                total_trxs[trx_dict.get("hash")] = trx_dict
+                total_trxs[trx_dict.hash] = trx_dict
                 cache_last_block_number(
                     chain_id,
-                    trx_dict.get("userAddress"),
+                    trx_dict.userAddress,
                     trx_type,
-                    trx_dict.get("blockNumber")
+                    trx_dict.blockNumber
                 )
 
             if trx_type == TrxType.TOKEN_TRX.value:
@@ -254,7 +355,7 @@ def create_trxs(
 
                     if token:
                         token = make_token_dict(token)
-                        existed_trx["tokens"] = token
+                        existed_trx.tokens = token
                         total_trxs[trx.get("hash")] = existed_trx
 
                 else:
@@ -265,9 +366,9 @@ def create_trxs(
                     )
                     cache_last_block_number(
                         chain_id,
-                        trx_dict.get("userAddress"),
+                        trx_dict.userAddress,
                         trx_type,
-                        trx_dict.get("blockNumber")
+                        trx_dict.blockNumber
                     )
                     token, created_trxs_tokens = create_trx_tokens(
                         chain_id,
@@ -277,8 +378,8 @@ def create_trxs(
                     )
                     if token:
                         token = make_token_dict(token)
-                        trx_dict["tokens"] = token
-                    total_trxs[trx_dict.get("hash")] = trx_dict
+                        trx_dict.tokens = token
+                    total_trxs[trx_dict.hash] = trx_dict
 
     return list(total_trxs.values())
 
@@ -308,13 +409,17 @@ def create_trx(
             trx.get("methodId"),
             trx.get("functionName")
         )
-        trx["labels"] = labels
+        if labels:
+            trx["labels"] = json.dumps(make_label_dict(labels))
+            # trx["labels"] = make_label_dict(labels)
+
     except Exception as e:
         logging.exception(
             f"{e} -----------------> {trx.get('hash')} - {chain_id}")
 
     trx["chainId"] = chain_id
     trx["fromAddress"] = trx.get("from")
+    trx["toAddress"] = trx.get("to")
     trx["timeStamp"] = int(trx.get("timeStamp"))
 
     if usd_price:
@@ -324,7 +429,8 @@ def create_trx(
             trx.get("cumulativeGasUsed"), usd_price)
 
     trx_obj = parse_obj_as(Trx, trx)
-    return trx_obj.dict()
+    # return trx_obj.dict()
+    return trx_obj
 
 
 def get_trx_input_and_type_from_web3(
@@ -333,7 +439,7 @@ def get_trx_input_and_type_from_web3(
     input: str = None
 ):
     try:
-        w3 = Chain(chainId=chain_id).w3
+        w3 = Chain(id=chain_id).w3
         web3_trx = w3.eth.get_transaction(hash)
         if web3_trx:
             if input in [None, "0x", "deprecated", ""]:
@@ -344,6 +450,13 @@ def get_trx_input_and_type_from_web3(
             return input, None
     except (requests.exceptions.HTTPError, exceptions.TransactionNotFound):
         return input, None
+
+
+def make_label_dict(labels: List[Label]):
+    label_dict_list = []
+    for label in labels:
+        label_dict_list.append(label.dict())
+    return label_dict_list
 
 
 def create_trx_tokens(
@@ -433,13 +546,20 @@ def make_token_dict(tokens: List[token.Token]):
 
 
 def insert_trxs(
-    chain_id: ChainId,
-    trxs: List[Dict]
+    trxs: List[Trx]
 ):
-    client = Trx.mongo_client(chain_id)
+    ps = InitializePostgres()
 
     for trx in trxs:
-        try:
-            client.insert_one(trx)
-        except errors.DuplicateKeyError:
-            continue
+        # if trx.labels:
+        #     trx.labels = json.dumps(trx.labels)
+        if trx.tokens:
+            trx.tokens = json.dumps(trx.tokens)
+        with ps.session as session:
+            try:
+                session.add(trx)
+                session.commit()
+            # except Exception as e:
+            except psycopg2.errors.UniqueViolation:
+                # logging.exception(e)
+                continue

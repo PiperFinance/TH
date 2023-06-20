@@ -16,7 +16,6 @@ def decode_trx_function_selector(
     method_id: str = None,
     function_name: str = None
 ):
-    labels = None
     if input not in ["deprecated", "0x", "", None]:
         function_selector, labels = get_and_create_function_selector(input)
         if function_selector:
@@ -41,10 +40,11 @@ def decode_trx_function_selector(
                         args
                     )
 
+    elif function_name not in ["", None] and method_id not in ["0x", None]:
+        labels = save_and_create_function_selector(
+            method_id, function_name)
     else:
-        if function_name not in ["", None] and method_id not in ["0x", None]:
-            labels = save_and_create_function_selector(
-                method_id, function_name)
+        return None
     return labels
 
 

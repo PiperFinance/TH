@@ -1,17 +1,11 @@
-from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
 
-from configs.mongo_config import _client
-from utils.types import ChainId, MongoClient
-
-
-class TrxWithNoLabels(BaseModel):
-    chainId: ChainId
-    hash: str
-    chainIdHash: str
+from .chain import Chain
+from .token import Token
+from .address import Address
+from configs.mongo_config import client
 
 
-    @classmethod
-    def mongo_client(cls) -> MongoClient:
-        c = _client(cls.__name__)
-        c.create_index("chainIdHash", unique=True)
-        return c
+class TrxWithNoLabels(SQLModel, table=True):
+    chainId: int = Field(foreign_key=Chain.id)
+    hash: str = Field(primary_key=True)

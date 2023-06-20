@@ -1,9 +1,12 @@
 uvicorn
 fastapi
 redis 
-pymongo 
-odmantic 
 requests 
 web3 
-python-dotenv 
+python-dotenv
 numpy
+# pymongo
+# odmantic
+pydantic
+sqlmodel
+psycopg2-binary

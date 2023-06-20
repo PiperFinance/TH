@@ -16,7 +16,7 @@ def get_chain_native_token(
     chain_id,
     user_address
 ):
-    native = Chain(chainId=chain_id).wNative
+    native = Chain(id=chain_id).wNative
     return get_trx_token(
         chain_id,
         native.get("address"),

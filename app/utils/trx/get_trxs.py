@@ -1,21 +1,44 @@
+import json
 import logging
 from pydantic import parse_obj_as
 from typing import List, Dict, Union
+from sqlmodel import select
 
-from models import Trx
+from models import Trx, Token, Label
 from utils.types import Address, ChainId
+from configs.postgres_config import InitializePostgres
+from schemas.response_schema import TrxSchema
 
 
 def get_users_token_trxs_len(
     chain_ids: Union[List[ChainId], ChainId],
     addresses: Union[List[Address], Address]
 ):
-    if type(chain_ids) != list:
-        chain_ids = [chain_ids]
-    trx_len = 0
-    for chain_id in chain_ids:
-        trx_len += get_users_chain_token_trxs_len(chain_id, addresses)
-    return trx_len
+    if type(chain_ids) == list:
+        if type(addresses) == list:
+            statement = select(Trx).where(
+                Trx.chainId in chain_ids,
+                Trx.userAddress in addresses)
+        else:
+            statement = select(Trx).where(
+                Trx.chainId in chain_ids,
+                Trx.userAddress == addresses)
+    else:
+        if type(addresses) == list:
+            statement = select(Trx).where(
+                Trx.chainId == chain_ids,
+                Trx.userAddress in addresses)
+        else:
+            statement = select(Trx).where(
+                Trx.chainId == chain_ids,
+                Trx.userAddress == addresses)
+
+    ps = InitializePostgres()
+    with ps.session() as session:
+        results = session.exec(statement)
+        trxs_len = len(results.all())
+
+    return trxs_len
 
 
 def get_users_token_trxs(
@@ -24,79 +47,66 @@ def get_users_token_trxs(
     skip: int = 0,
     limit: int = 0
 ) -> List[Trx]:
-    if type(chain_ids) != list:
-        chain_ids = [chain_ids]
-    trxs = []
-    for chain_id in chain_ids:
-        chain_trxs = get_users_chain_token_trxs(
-            chain_id, addresses, skip, limit)
-        if chain_trxs not in [None, []]:
-            trxs.extend(chain_trxs)
-    return trxs
 
-
-def get_users_chain_token_trxs_len(
-    chain_id: ChainId,
-    addresses: Union[List[Address], Address]
-) -> int:
-    client = Trx.mongo_client(chain_id)
     if type(addresses) == list:
-        addrs = []
-        for address in addresses:
-            addrs.append({"userAddress": address})
-        query = {"$or": addrs}
+        if type(chain_ids) == list:
+            _statement = select(Trx).where(
+                Trx.chainId.in_(chain_ids),
+                Trx.userAddress.in_(addresses))
+        else:
+            _statement = select(Trx).where(
+                Trx.chainId == chain_ids,
+                Trx.userAddress.in_(addresses))
     else:
-        query = {"userAddress": addresses}
+        if type(chain_ids) == list:
+            _statement = select(Trx).where(
+                Trx.chainId.in_(chain_ids),
+                Trx.userAddress == addresses)
+        else:
+            _statement = select(Trx).where(
+                Trx.chainId == chain_ids,
+                Trx.userAddress == addresses)
 
-    return len(list(client.find(query)))
+    ps = InitializePostgres()
+    with ps.session as session:
 
+        if limit >= 1 and skip >= 1:
+            statement = _statement.order_by(Trx.timeStamp.desc())
+            results = session.exec(statement)
+            trxs = results.all()[skip:skip + limit]
 
-def get_users_chain_token_trxs(
-    chain_id: ChainId,
-    addresses: Union[List[Address], Address],
-    skip: int = 0,
-    limit: int = 0
-) -> List[Trx]:
+        elif limit >= 1 and skip < 1:
+            statement = _statement.limit(limit).order_by(Trx.timeStamp.desc())
+            results = session.exec(statement)
+            trxs = results.all()
 
-    client = Trx.mongo_client(chain_id)
-    if type(addresses) == list:
-        addrs = []
-        for address in addresses:
-            addrs.append({"userAddress": address})
-        query = {"$or": addrs}
-    else:
-        query = {"userAddress": addresses}
+        else:
+            statement = _statement.order_by(Trx.timeStamp.desc())
+            results = session.exec(statement)
+            trxs = results.all()
 
-    if limit < 1:
-        try:
-            trxs = list(client.find(query).sort("timeStamp", -1))
-        except Exception as e:
-            logging.exception(e)
-            trxs = list(client.find(query))
-
-    if skip < 1:
-        try:
-            trxs = list(client.find(query).sort("timeStamp", -1).limit(limit))
-        except Exception as e:
-            logging.exception(e)
-            trxs = list(client.find(query).limit(limit))
-
-    else:
-        try:
-            trxs = list(client.find(query).sort(
-                "timeStamp", -1).skip(skip).limit(limit))
-        except Exception as e:
-            logging.exception(e)
-            trxs = list(client.find(query).skip(skip).limit(limit))
-
-    if trxs in [[], None]:
-        return
-
-    return create_trx_objects(trxs)
+    return create_trxs_schema(trxs)
 
 
-def create_trx_objects(trxs: List[Dict]):
-    trx_objs = []
+def create_trxs_schema(trxs: List[Trx]):
+    trx_list = []
+
     for trx in trxs:
-        trx_objs.append(parse_obj_as(Trx, trx))
-    return trx_objs
+        trx = trx.dict()
+        if trx.get("tokens"):
+            token_list = json.loads(trx.get("tokens"))
+            tokens = []
+            for token in token_list:
+                tokens.append(parse_obj_as(Token, token))
+            trx["tokens"] = tokens
+
+        if trx.get("labels"):
+            label_list = json.loads(trx.get("labels"))
+            labels = []
+            for label in label_list:
+                labels.append(parse_obj_as(Label, label))
+            trx["labels"] = labels
+
+        trx_list.append(parse_obj_as(TrxSchema, trx))
+
+    return trx_list

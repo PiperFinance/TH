@@ -8,29 +8,34 @@ from . import (
     save_function_selectors,
     save_trxs,
     save_trxs_with_no_labels,
-    delete_trxs_with_no_labels
-
+    delete_trxs_with_no_labels,
+    update_trxs
 )
 
 routers = APIRouter()
 
 routers.include_router(
     save_function_selectors.routes,
-    tags=["Save Function Selector"])
+    tags=["Save Function Selectors"])
 
 routers.include_router(
     get_function_selectors.routes,
-    tags=["Get Function Selector"])
+    tags=["Get Function Selectors"])
 
 
 routers.include_router(
     save_trxs.routes,
-    tags=["Save Transaction"])
+    tags=["Save Transactions"])
 
 
 routers.include_router(
     get_trxs.routes,
-    tags=["Get Transaction"])
+    tags=["Get Transactions"])
+
+
+routers.include_router(
+    update_trxs.routes,
+    tags=["Update Transactions"])
 
 
 routers.include_router(

@@ -25,9 +25,8 @@ class UsersData(BaseModel):
 
 
 class TrxWithNoLabelsSchema(BaseModel):
-    chainId: ChainId
     hash: str
 
 
 class TrxsWithNoLabelsSchema(BaseModel):
-    trxs: List[TrxWithNoLabelsSchema]
+    hashes: List[TrxWithNoLabelsSchema]

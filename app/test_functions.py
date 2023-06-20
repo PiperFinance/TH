@@ -1,22 +1,43 @@
 
 async def _tt_():
     from utils.trx.save_trxs import save_user_chain_token_trxs, save_users_chain_token_trxs
-    from utils.trx.update_trxs import update_users_token_trxs, update_users_chain_token_trxs
-    from utils.trx.get_trxs import get_users_chain_token_trxs
+    from utils.trx.update_trxs import update_users_token_trxs
+    from utils.trx.get_trxs import get_users_token_trxs
     from models import FunctionSelector, Trx
     from configs.redis_config import cache_client
     from tt1 import get_trxs_with_input_and_no_labels
+    from configs.postgres_config import InitializePostgres
     # from utils.trx.decode_trx_input import decode_trx_input_data
 
     # 0x73205B2F021E519f75418Ce41C33Dbae9470C238
 
+    save_users_chain_token_trxs(
+        56, ["0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1"])
+
+    # InitializePostgres().insert_addresses(
+    #     "0xB49F17514D6F340d7bcdFfC47526C9A3713697e0", 1)
+
+    # InitializePostgres().insert_addresses(
+    #     "0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1", 1)
+
+    # InitializePostgres().insert_addresses(
+    #     "0x416299AAde6443e6F6e8ab67126e65a7F606eeF5", 1)
+
     # save_users_chain_token_trxs(
-    #     56, ["0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1"])
+    #     56, ["0xB49F17514D6F340d7bcdFfC47526C9A3713697e0"])
 
     # update_users_token_trxs(
     #     [1],
     #     ["0x416299AAde6443e6F6e8ab67126e65a7F606eeF5"]
     # )
+
+    # update_users_token_trxs(
+    #     [56],
+    #     ["0xB49F17514D6F340d7bcdFfC47526C9A3713697e0"]
+    # )
+
+    # get_users_token_trxs(
+    #     [56], ["0xB49F17514D6F340d7bcdFfC47526C9A3713697e0"])
 
     # trxs = get_users_chain_token_trxs(
     #     56, ["0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1"])
@@ -29,7 +50,7 @@ async def _tt_():
     #     "text": "Transfer",
     #     "args": [
     #         (
-    #             "to", "address"
+    #             "to", "address"get_users_token_trxs
     #         ),
     #         (
     #             "amount", "uint256"
