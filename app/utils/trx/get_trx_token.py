@@ -12,10 +12,7 @@ from utils.abis import token_abi
 from utils.types import ChainId, Address
 
 
-def get_chain_native_token(
-    chain_id,
-    user_address
-):
+def get_chain_native_token(chain_id, user_address):
     native = Chain(chainId=chain_id).wNative
     return get_trx_token(
         chain_id,
@@ -23,7 +20,7 @@ def get_chain_native_token(
         user_address,
         native.get("name"),
         native.get("symbol"),
-        native.get("decimals")
+        native.get("decimals"),
     )
 
 
@@ -33,12 +30,11 @@ def get_trx_token(
     user_address: Address,
     token_name: str,
     token_symbol: str,
-    token_decimal: str
+    token_decimal: str,
 ):
     try:
         tokens = constants.tokens
-        token_checksum = crc32(
-            "-".join([token_address.lower(), str(chain_id)]).encode())
+        token_checksum = f"{token_address.lower()}-{str(chain_id)}"
 
         token = tokens.get(token_checksum)
         if not token:
@@ -48,7 +44,7 @@ def get_trx_token(
                     "address": token_address,
                     "name": token_name,
                     "symbol": token_symbol,
-                    "decimals": int(token_decimal)
+                    "decimals": int(token_decimal),
                 }
             }
 
@@ -66,7 +62,8 @@ def get_trx_token(
         return token
     except Exception as e:
         logging.exception(
-            f'{e} -----------------------> {token_address} - {user_address} - {token_name}')
+            f"{e} -----------------------> {token_address} - {user_address} - {token_name}"
+        )
 
 
 def get_token_price(chain_id: ChainId, token_id: int):
@@ -74,20 +71,20 @@ def get_token_price(chain_id: ChainId, token_id: int):
     try:
         # res = requests.get(url)
         with requests.request("GET", url=url) as res:
-            if res.text == '':
+            if res.text == "":
                 return None
-            res = np.format_float_positional(float(res.text), trim='-')
-    except (requests.exceptions.JSONDecodeError, requests.exceptions.ConnectionError,
-            requests.exceptions.ConnectTimeout, requests.exceptions.SSLError,
-            requests.exceptions.ReadTimeout):
+            res = np.format_float_positional(float(res.text), trim="-")
+    except (
+        requests.exceptions.JSONDecodeError,
+        requests.exceptions.ConnectionError,
+        requests.exceptions.ConnectTimeout,
+        requests.exceptions.SSLError,
+        requests.exceptions.ReadTimeout,
+    ):
         return None
 
 
-def get_token_balance(
-    chain_id: ChainId,
-    token_address: Address,
-    user_address: Address
-):
+def get_token_balance(chain_id: ChainId, token_address: Address, user_address: Address):
     try:
         w3 = Chain(chainId=chain_id).w3
         contract = w3.eth.contract(token_address, abi=token_abi)
@@ -98,4 +95,4 @@ def get_token_balance(
 
 
 def calculate_token_value(price: float, balance: int):
-    return np.format_float_positional(price * balance, trim='-')
+    return np.format_float_positional(price * balance, trim="-")

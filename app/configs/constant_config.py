@@ -10,7 +10,10 @@ from utils.types import ChainId
 # _chains = requests.get(
 #     "https://raw.githubusercontent.com/PiperFinance/CD/main/chains/mainnet.json")
 
-with requests.request("GET", url="https://raw.githubusercontent.com/PiperFinance/CD/main/chains/mainnet.json") as _chains:
+with requests.request(
+    "GET",
+    url="https://raw.githubusercontent.com/PiperFinance/CD/main/chains/mainnet.json",
+) as _chains:
     _chains = _chains.json()
 
 chains = {}
@@ -22,17 +25,19 @@ for chain in _chains:
 # _tokens = requests.get(
 #     "https://raw.githubusercontent.com/PiperFinance/CD/main/tokens/outVerified/all_tokens.json")
 
-with requests.request("GET", url="https://raw.githubusercontent.com/PiperFinance/CD/main/tokens/outVerified/all_tokens.json") as _tokens:
+with requests.request(
+    "GET",
+    url="https://raw.githubusercontent.com/PiperFinance/CD/main/tokens/outVerified/all_tokens.json",
+) as _tokens:
     _tokens = _tokens.json()
 
 tokens = {}
 
 for token_checksum, token in _tokens.items():
-    tokens[int(token_checksum)] = token
+    tokens[token_checksum] = token
 
 
-api_key_path = os.getenv(
-    "API_LIST") or f"{Path(os.getcwd())}/data/api_keys.json"
+api_key_path = os.getenv("API_LIST") or f"{Path(os.getcwd())}/data/api_keys.json"
 
 with open(api_key_path) as f:
     _api_keys = json.load(f)
@@ -52,7 +57,7 @@ function_selectors = list(_function_selectors)
 
 class Constants(BaseConfig):
     chains: Dict[ChainId, Dict] = chains
-    tokens: Dict[int, Dict] = tokens
+    tokens: Dict[str, Dict] = tokens
     api_keys: Dict[ChainId, List] = api_keys
     function_selectors: List[Dict] = function_selectors
 
