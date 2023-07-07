@@ -11,6 +11,7 @@ services:
     ports:
       - 23456:23456
     environment:
+      - SAVE_SECRET=------!@#RandomSecret123-------
       - DOMAIN=th.piper.finance
       - PORT=23456
       - REDIS_HOST=redis

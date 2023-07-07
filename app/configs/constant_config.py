@@ -60,6 +60,7 @@ class Constants(BaseConfig):
     tokens: Dict[str, Dict] = tokens
     api_keys: Dict[ChainId, List] = api_keys
     function_selectors: List[Dict] = function_selectors
+    save_secret: str = os.getenv("SAVE_SECRET", "------!@#RandomSecret123-------")
 
     def api_key_generator(self, chain_id) -> Generator[ApiKey, None, None]:
         i = 0
