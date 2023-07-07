@@ -2,7 +2,6 @@ import requests
 import logging
 import numpy as np
 from web3 import exceptions
-from zlib import crc32
 from pydantic import parse_obj_as
 
 from models import Chain
@@ -12,7 +11,7 @@ from utils.abis import token_abi
 from utils.types import ChainId, Address
 
 
-def get_chain_native_token(chain_id, user_address):
+def get_chain_native_token(chain_id, user_address) -> Token:
     native = Chain(chainId=chain_id).wNative
     return get_trx_token(
         chain_id,
@@ -32,41 +31,36 @@ def get_trx_token(
     token_symbol: str,
     token_decimal: str,
 ):
-    try:
-        tokens = constants.tokens
-        token_checksum = f"{token_address.lower()}-{str(chain_id)}"
+    tokens = constants.tokens
+    token_checksum = f"{token_address.lower()}-{str(chain_id)}"
 
-        token = tokens.get(token_checksum)
-        if not token:
-            token = {
-                "detail": {
-                    "chainId": chain_id,
-                    "address": token_address,
-                    "name": token_name,
-                    "symbol": token_symbol,
-                    "decimals": int(token_decimal),
-                }
+    token = tokens.get(token_checksum)
+    if not token:
+        token = {
+            "detail": {
+                "chainId": chain_id,
+                "address": token_address,
+                "name": token_name,
+                "symbol": token_symbol,
+                "decimals": int(token_decimal),
             }
+        }
 
-        token = parse_obj_as(Token, token)
+    token = parse_obj_as(Token, token)
 
-        # balance = get_token_balance(
-        #     chain_id, token_address, user_address)
-        # if balance:
-        #     token.balance = str(balance)
-        # price = get_token_price(chain_id, token_checksum)
-        # if price:
-        #     token.priceUSD = price
-        #     token.value = calculate_token_value(float(price), balance)
+    # balance = get_token_balance(
+    #     chain_id, token_address, user_address)
+    # if balance:
+    #     token.balance = str(balance)
+    # price = get_token_price(chain_id, token_checksum)
+    # if price:
+    #     token.priceUSD = price
+    #     token.value = calculate_token_value(float(price), balance)
 
-        return token
-    except Exception as e:
-        logging.exception(
-            f"{e} -----------------------> {token_address} - {user_address} - {token_name}"
-        )
+    return token
 
 
-def get_token_price(chain_id: ChainId, token_id: int):
+def get_token_price(chain_id: ChainId, token_id: str):
     url = f"https://tp.piper.finance/?chainId={chain_id}&tokenId={token_id}"
     try:
         # res = requests.get(url)
@@ -87,7 +81,7 @@ def get_token_price(chain_id: ChainId, token_id: int):
 def get_token_balance(chain_id: ChainId, token_address: Address, user_address: Address):
     try:
         w3 = Chain(chainId=chain_id).w3
-        contract = w3.eth.contract(token_address, abi=token_abi)
+        contract = w3.eth.contract(token_address.checked, abi=token_abi)
         balance = contract.functions.balanceOf(user_address).call()
         return balance
     except (exceptions.ContractLogicError, requests.exceptions.ReadTimeout):

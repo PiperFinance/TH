@@ -2,10 +2,10 @@ import json
 import requests
 import os
 from pydantic import BaseConfig
-from typing import Dict, List
+from typing import Dict, Generator, List
 from pathlib import Path
 
-from utils.types import ChainId
+from utils.types import ChainId, ApiKey
 
 # _chains = requests.get(
 #     "https://raw.githubusercontent.com/PiperFinance/CD/main/chains/mainnet.json")
@@ -60,6 +60,14 @@ class Constants(BaseConfig):
     tokens: Dict[str, Dict] = tokens
     api_keys: Dict[ChainId, List] = api_keys
     function_selectors: List[Dict] = function_selectors
+
+    def api_key_generator(self, chain_id) -> Generator[ApiKey, None, None]:
+        i = 0
+        while keys := self.api_keys[chain_id]:
+            yield ApiKey(keys[i])
+            i += 1
+            if i > len(keys):
+                i = 0
 
 
 constants = Constants()

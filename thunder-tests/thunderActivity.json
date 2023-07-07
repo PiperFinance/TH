@@ -1,0 +1,106 @@
+[
+    {
+        "_id": "9a258cbb-6228-46e4-b525-ee49de81057d",
+        "colId": "history",
+        "containerId": "",
+        "name": "http://localhost:8000/save_users_trxs",
+        "url": "http://localhost:8000/save_users_trxs",
+        "method": "POST",
+        "sortNum": 0,
+        "created": "2023-07-06T13:14:58.850Z",
+        "modified": "2023-07-07T14:29:47.364Z",
+        "headers": [],
+        "params": [],
+        "body": {
+            "type": "json",
+            "raw": "{\n  \"chainIds\": [\n    56,\n    250,\n    137\n  ],\n  \"userAddresses\": [\n    \"0xF977814e90dA44bFA03b6295A0616a897441aceC\",\n    \"0xf89d7b9c864f589bbF53a82105107622B35EaA40\"\n  ],\n  \"blocksBeforeCache\": \"5000\"\n}",
+            "form": []
+        },
+        "tests": []
+    },
+    {
+        "_id": "2bd54d5a-930b-407d-b017-380418458611",
+        "colId": "history",
+        "containerId": "",
+        "name": "http://localhost:8000/save_users_trxs Copy",
+        "url": "http://localhost:8000/get_users_trxs?userAddress=0xB49F17514D6F340d7bcdFfC47526C9A3713697e0&chainId=1&chainId=10&chainId=56&chainId=100&chainId=137&chainId=250&chainId=1284&chainId=43114&chainId=42161&chainId=1313161554&pageSize=20&pageNumber=1",
+        "method": "GET",
+        "sortNum": 0,
+        "created": "2023-07-06T13:14:58.850Z",
+        "modified": "2023-07-07T14:38:46.307Z",
+        "headers": [],
+        "params": [
+            {
+                "name": "userAddress",
+                "value": "0xB49F17514D6F340d7bcdFfC47526C9A3713697e0",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "1",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "10",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "56",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "100",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "137",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "250",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "1284",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "43114",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "42161",
+                "isPath": false
+            },
+            {
+                "name": "chainId",
+                "value": "1313161554",
+                "isPath": false
+            },
+            {
+                "name": "pageSize",
+                "value": "20",
+                "isPath": false
+            },
+            {
+                "name": "pageNumber",
+                "value": "1",
+                "isPath": false
+            }
+        ],
+        "body": {
+            "type": "json",
+            "raw": "{\n  \"chainIds\": [\n    56,\n    250,\n    137\n  ],\n  \"userAddresses\": [\n    \"0xF977814e90dA44bFA03b6295A0616a897441aceC\",\n    \"0xf89d7b9c864f589bbF53a82105107622B35EaA40\"\n  ],\n  \"blocksBeforeCache\": \"5000\"\n}",
+            "form": []
+        },
+        "tests": []
+    }
+]

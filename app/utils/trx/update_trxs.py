@@ -8,10 +8,7 @@ from .get_trxs import get_users_token_trxs, get_users_chain_token_trxs
 from utils.types import Address, ChainId
 
 
-def update_users_token_trxs(
-    chain_ids: List[ChainId],
-    addresses: List[Address]
-):
+def update_users_token_trxs(chain_ids: List[ChainId], addresses: List[Address]):
 
     trxs = get_users_token_trxs(chain_ids, addresses)
     if trxs in [[], None]:
@@ -20,10 +17,7 @@ def update_users_token_trxs(
     update_trxs(trxs)
 
 
-def update_users_chain_token_trxs(
-    chain_id: ChainId,
-    addresses: List[Address]
-):
+def update_users_chain_token_trxs(chain_id: ChainId, addresses: List[Address]):
 
     trxs = get_users_chain_token_trxs(chain_id, addresses)
     if trxs in [[], None]:
@@ -32,32 +26,18 @@ def update_users_chain_token_trxs(
     update_trxs(trxs)
 
 
-def update_trxs(
-    trxs: List[Trx]
-):
+def update_trxs(trxs: List[Trx]):
     for trx in trxs:
         try:
             if not trx.labels:
                 input, type = get_trx_input_and_type_from_web3(
-                    trx.chainId,
-                    trx.hash,
-                    trx.input
+                    trx.chainId, trx.hash, trx.input
                 )
-                labels = decode_trx_function_selector(
-                    trx.input,
-                    None,
-                    None
-                )
+                labels = decode_trx_function_selector(trx.input, None, None)
 
-                update_trx(
-                    trx.chainId,
-                    trx.hash,
-                    input,
-                    type,
-                    labels
-                )
+                update_trx(trx.chainId, trx.hash, input, type, labels)
         except Exception as e:
-            logging.exception(e)
+            logging.warning(e)
             continue
 
 
@@ -66,7 +46,7 @@ def update_trx(
     hash: str,
     input: str = None,
     type: int = None,
-    labels: List[Label] = None
+    labels: List[Label] = None,
 ):
     try:
         values = dict()

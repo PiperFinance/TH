@@ -2,18 +2,11 @@ from enum import Enum
 import pymongo
 from pydantic import BaseModel
 from typing import List, Optional, Any, Union
-# from sqlalchemy import ForeignKey, String
-# from sqlalchemy.orm import (
-#     DeclarativeBase,
-#     Mapped,
-#     mapped_column,
-#     relationship
-# )
 
 from . import Chain
 from .token import Token
 from configs.mongo_config import client
-from utils.types import Address, StringBlockNumber, MongoClient
+from utils.types import Address, StringBlockNumber, Collection
 
 
 class TrxType(Enum):
@@ -21,11 +14,13 @@ class TrxType(Enum):
     TOKEN_TRX = "token"
 
     @property
-    def url(self):
-        if self.value == "normal":
+    def url(self) -> str:
+        if self == self.NORMAL_TRX:
             return "?module=account&action=txlist"
-        if self.value == "token":
+        elif self == self.TOKEN_TRX:
             return "?module=account&action=tokentx"
+        else:
+            return ""
 
 
 class Label(BaseModel):
@@ -62,7 +57,7 @@ class Trx(Chain):
     txreceipt_status: Optional[str]
 
     @classmethod
-    def mongo_client(cls, chain_id: int) -> MongoClient:
+    def mongo_client(cls, chain_id: int) -> Collection:
         c = client(cls.__name__, chain_id)
         c.create_index("hash", unique=True)
         c.create_index([("timeStamp", pymongo.DESCENDING)], background=True)

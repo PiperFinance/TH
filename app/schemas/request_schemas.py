@@ -22,6 +22,7 @@ class UsersChainData(BaseModel):
 class UsersData(BaseModel):
     chainIds: List[ChainId]
     userAddresses: List[Address]
+    scanIterations: Optional[int]
 
 
 class TrxWithNoLabelsSchema(BaseModel):
