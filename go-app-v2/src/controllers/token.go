@@ -14,11 +14,10 @@ func GetToken(c context.Context, chainId int64, address string) (*models.Token, 
 		return nil, tx.Error
 	}
 	add := common.HexToAddress(address)
-	tokens, err := conf.KC[chainId].GetTokenAll(c, []common.Address{add})
+	tok, err := conf.KC[chainId].GetToken(c, add)
 	if err != nil {
 		return nil, err
 	}
-	tok := tokens[0]
 	t.Address = add
 	t.Symbol = tok.Symbol
 	t.Name = tok.Name

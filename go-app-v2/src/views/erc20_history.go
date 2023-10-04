@@ -23,7 +23,7 @@ func GetErc20TrxHistory(c *fiber.Ctx) error {
 		wg.Done()
 	}()
 	utils.WaitGroupTimeout(&wg, time.Second*5)
-	r, err := controllers.GetAddTrx(c.Context(), chain, add)
+	r, err := controllers.GetAddERC20Trx(c.Context(), chain, add)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status": "error",

@@ -20,11 +20,12 @@ type NFT struct {
 	BaseModel
 	ChainId     int64          `json:"chainId"`
 	Address     common.Address `json:"address"`
-	NFTID       string         `json:"nftID"`
+	NFTID       uint64         `json:"nftID"`
 	Name        string         `json:"name"`
 	Symbol      string         `json:"symbol"`
 	TotalSupply string         `json:"totalSupply"`
 	LogoURI     string         `json:"logoURI"`
+	MetaData    string         `json:"meta"`
 	Verify      bool           `json:"verify"`
 	Owner       common.Address `json:"owner"`
 }

@@ -32,6 +32,8 @@ func init() {
 	}
 	fmt.Println("BOOT : Loading Scanner ...")
 	conf.LoadScanner()
+	fmt.Println("BOOT : Loading Unmarshal Keys ...")
+	conf.LoadUnmarshal()
 	fmt.Println("BOOT : Loading Mainnets ...")
 	conf.LoadMainNets()
 	fmt.Println("BOOT : Loading Networks ...")
@@ -51,6 +53,10 @@ func main() {
 	app.Get("/:chain/tx/erc/721/:address", views.GetErc721TrxHistory)
 	// app.Get("/:chain/tx/erc/1155/:address", views.GetErc1155TrxHistory)
 	app.Get("/:chain/token/:address", views.GetToken)
+	app.Get("/:chain/nft/:address", views.GetNft)
+
+	// Balance
+	app.Get("wallet/:chain/nft/:address", views.GetWalletNft)
 
 	if err := app.Listen(conf.Config.ApiUrl); err != nil {
 		log.Fatal(err)

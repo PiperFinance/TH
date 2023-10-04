@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -31,6 +32,32 @@ func LastPreFetchedTrx(c context.Context, prefix string, chain int64, address st
 func SetLastPreFetchedTrx(c context.Context, prefix string, chain int64, address string, blockNo uint64) error {
 	k := fmt.Sprintf("TH:PF:%s:%d:%s", prefix, chain, address)
 	if cmd := conf.RedisClient.Set(c, k, blockNo, redis.KeepTTL); cmd.Err() != nil {
+		return cmd.Err()
+	}
+	return nil
+}
+
+func isRunning(c context.Context, prefix string, chain int64, address string) bool {
+	k := fmt.Sprintf("TH:UL:%s:%d:%s", prefix, chain, address)
+	if cmd := conf.RedisClient.Get(c, k); cmd.Err() == redis.Nil {
+		return false
+	} else if cmd.Err() != nil {
+		conf.Logger.Errorw("Redis Update Lock ", "err", cmd.Err())
+	}
+	return true
+}
+
+func setRunning(c context.Context, prefix string, chain int64, address string) error {
+	k := fmt.Sprintf("TH:UL:%s:%d:%s", prefix, chain, address)
+	if cmd := conf.RedisClient.Set(c, k, true, time.Minute*5); cmd.Err() != nil {
+		return cmd.Err()
+	}
+	return nil
+}
+
+func setFinished(c context.Context, prefix string, chain int64, address string) error {
+	k := fmt.Sprintf("TH:UL:%s:%d:%s", prefix, chain, address)
+	if cmd := conf.RedisClient.Del(c, k); cmd.Err() != nil {
 		return cmd.Err()
 	}
 	return nil

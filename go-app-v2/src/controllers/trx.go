@@ -16,6 +16,12 @@ func GetAddTrx(ctx context.Context, chainId int, address string) ([]models.Trx, 
 }
 
 func UpdateAddTrx(c context.Context, chainId int64, address string) error {
+	if isRunning(c, "20", chainId, address) {
+		return nil
+	} else {
+		setRunning(c, "20", chainId, address)
+		defer setFinished(c, "20", chainId, address)
+	}
 	end, err := conf.LatestBlock(c, chainId)
 	if err != nil {
 		return err
@@ -43,7 +49,7 @@ func UpdateAddTrxInRange(c context.Context, chainId int64, address string, start
 	i, lastBlock := 0, 0
 	// TODO : store last index , max depth of 5 , go deeper if requested
 	for {
-		_lastBlock, err := UpdateAddERC20TrxInRangePaginated(c, chainId, address, start, end, i, 100)
+		_lastBlock, err := UpdateAddTrxInRangePaginated(c, chainId, address, start, end, i, 100)
 		if err != nil {
 			return lastBlock, err
 		}

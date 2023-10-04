@@ -7,15 +7,21 @@ import (
 	"strings"
 )
 
-func GetAddERC20Trx(ctx context.Context, chainId int, address string) ([]models.Trx, error) {
-	r := make([]models.Trx, 0)
-	if tx := conf.DB.WithContext(ctx).Where(models.Trx{ChainId: chainId, User: address}).Find(&r); tx.Error != nil {
+func GetAddERC20Trx(ctx context.Context, chainId int, address string) ([]models.Erc20Trx, error) {
+	r := make([]models.Erc20Trx, 0)
+	if tx := conf.DB.WithContext(ctx).Where(models.Erc20Trx{ChainId: chainId, User: address}).Find(&r); tx.Error != nil {
 		return nil, tx.Error
 	}
 	return r, nil
 }
 
 func UpdateAddERC20Trx(c context.Context, chainId int64, address string) error {
+	if isRunning(c, "20", chainId, address) {
+		return nil
+	} else {
+		setRunning(c, "20", chainId, address)
+		defer setFinished(c, "20", chainId, address)
+	}
 	end, err := conf.LatestBlock(c, chainId)
 	if err != nil {
 		return err
@@ -28,7 +34,7 @@ func UpdateAddERC20Trx(c context.Context, chainId int64, address string) error {
 	var lastfetched int
 	if end-start > 2 {
 
-		lastfetched, err = UpdateAddTrxInRange(c, chainId, address, start, end)
+		lastfetched, err = UpdateAddERC20TrxInRange(c, chainId, address, start, end)
 		if err != nil && !strings.Contains(err.Error(), "No transactions found") {
 			return err
 		}

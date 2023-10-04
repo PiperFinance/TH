@@ -20,7 +20,8 @@ var Secrets secrets
 type scannerApiKey = map[int64][]string
 
 type secrets struct {
-	ScannerApiKey scannerApiKey
+	ScannerApiKey    scannerApiKey
+	UnmarshalApiKeys []string
 }
 
 func LoadSecretStoage(githubToken string) {
@@ -54,6 +55,29 @@ func LoadSecretStoage(githubToken string) {
 	resp.Body.Close()
 
 	err = json.Unmarshal(scannerKeys, &Secrets.ScannerApiKey)
+	if err != nil {
+		fmt.Println(string(scannerKeys), url.String(), "-----", apiKUrl.String())
+		panic(err)
+	}
+
+	// [unmarshal](https://docs.unmarshal.io/reference/golang-sdk) API Keys
+	mApiKUrl := url.JoinPath("UnmarshalApiKeys.json")
+	req, err = http.NewRequest("GET", mApiKUrl.String(), nil)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("Authorization", "token "+githubToken)
+	req.Header.Add("Accept", "application/vnd.github.v4+raw")
+	resp, err = http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	mApiKeys, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	resp.Body.Close()
+	err = json.Unmarshal(mApiKeys, &Secrets.UnmarshalApiKeys)
 	if err != nil {
 		fmt.Println(string(scannerKeys), url.String(), "-----", apiKUrl.String())
 		panic(err)

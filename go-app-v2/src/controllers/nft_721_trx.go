@@ -7,15 +7,21 @@ import (
 	"strings"
 )
 
-func GetAddERC721Trx(ctx context.Context, chainId int, address string) ([]models.Trx, error) {
-	r := make([]models.Trx, 0)
-	if tx := conf.DB.WithContext(ctx).Where(models.Trx{ChainId: chainId, User: address}).Find(&r); tx.Error != nil {
+func GetAddERC721Trx(ctx context.Context, chainId int, address string) ([]models.Erc721Trx, error) {
+	r := make([]models.Erc721Trx, 0)
+	if tx := conf.DB.WithContext(ctx).Where(models.Erc721Trx{ChainId: chainId, User: address}).Find(&r); tx.Error != nil {
 		return nil, tx.Error
 	}
 	return r, nil
 }
 
 func UpdateAddERC721Trx(c context.Context, chainId int64, address string) error {
+	if isRunning(c, "721", chainId, address) {
+		return nil
+	} else {
+		setRunning(c, "721", chainId, address)
+		defer setFinished(c, "721", chainId, address)
+	}
 	end, err := conf.LatestBlock(c, chainId)
 	if err != nil {
 		return err
