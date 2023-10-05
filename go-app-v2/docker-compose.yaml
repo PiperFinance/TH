@@ -50,8 +50,10 @@ services:
 
 networks:
   postgres_db:
+    external: true
     name: postgres_db
   mongo_db:
+    external: true
     name: mongo_db
   th_net_v2:
     driver: bridge
