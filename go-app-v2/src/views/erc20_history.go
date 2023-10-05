@@ -4,6 +4,7 @@ import (
 	"TH/src/conf"
 	"TH/src/controllers"
 	"TH/src/utils"
+	"context"
 	"sync"
 	"time"
 
@@ -17,7 +18,8 @@ func GetErc20TrxHistory(c *fiber.Ctx) error {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	go func() {
-		if err := controllers.UpdateAddERC20Trx(c.Context(), int64(chain), add); err != nil {
+		ctx := context.Background()
+		if err := controllers.UpdateAddERC20Trx(ctx, int64(chain), add); err != nil {
 			conf.Logger.Errorw("UpdateAddERC20Trx", "err", err)
 		}
 		wg.Done()

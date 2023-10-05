@@ -4,6 +4,7 @@ import (
 	"TH/src/conf"
 	"TH/src/controllers"
 	"TH/src/utils"
+	"context"
 	"sync"
 	"time"
 
@@ -23,7 +24,8 @@ func GetTxHistory(c *fiber.Ctx) error {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	go func() {
-		if err := controllers.UpdateAddTrx(c.Context(), int64(chain), add); err != nil {
+		ctx := context.Background()
+		if err := controllers.UpdateAddTrx(ctx, int64(chain), add); err != nil {
 			conf.Logger.Errorw("UpdateAddTransfer", "err", err)
 		}
 		wg.Done()
