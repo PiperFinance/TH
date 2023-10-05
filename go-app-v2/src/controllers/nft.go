@@ -65,7 +65,8 @@ func GetUserNFTs(c context.Context, chainId int64, address string) ([]*models.NF
 			Symbol:      v.IssuerSpecificData.Name,
 			Name:        v.IssuerSpecificData.Name,
 			NFTID:       id,
-			MetaData:    v.AnimationUrl,
+			MetaData:    v.Description,
+			LogoURI:     v.IssuerSpecificData.ImageUrl,
 			TotalSupply: "1",
 			Owner:       common.HexToAddress(v.Owner),
 		})

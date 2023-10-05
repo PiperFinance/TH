@@ -1,43 +1,32 @@
 version: '3'
 
 services:
-  ua:
-    hostname: UA
-    container_name: ua
+  th:
+    hostname: THV2 
+    container_name: th_v2
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     ports:
-      - 6003:6003
-      - 9010:9010
+      - 6007:6007
+    env_file:
+      - docker.env
     environment:
-      API_URL: :6003
-      PGWEB_PORT: 9010
-      PGWEB_AUTH_USER: piperFinance
-      PGWEB_AUTH_PASS: Piper2022
-      PROJECT_NAME: UA
+      API_URL: :6007
+      PROJECT_NAME: TH
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_HOST: postgresdb
       DB_PORT: 5432
-      DB_NAME: uatest
-      PS_SYNC_MIN_DELAY: 10s
+      DB_NAME: test_th
       SUPPORTED_CHAINS: 1,250,56,137,43114,42161,9001,100,1284,10,1313161554
       LOG_LEVEL: debug
       REDIS_URL: redis://bs_redis:6379
-      REDIS_DB: 1
+      REDIS_DB: 5
       MONGO_URL: mongodb://piperFinance:Piper2022@mongo:27017
-      MONGO_DBNAME: "TEST_BS2"
-      JWT_ACCESS_SECRET: my_ultra_secure_secret
-      JWT_REFRESH_SECRET: my_ultra_secure_secret
-      JWT_REFRESH_EXPIRED_IN: 168h
-      JWT_ACCESS_EXPIRED_IN: 100h
-      JWT_MAXAGE: 168h
-      TH_SAVE_TIMEOUT: 25m
-      NT_SAVE_TIMEOUT: 10m
-      MAX_CONCURRENT_WORKER: 100
-      SAVE_SECRET: "------!@#RandomSecret123-------"
+      MONGO_DBNAME: "TEST_TH"
+      GITHUB_TOKEN: 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
       BS_URL: http://BS:6001
       PS_URL: http://PS:6002
       UA_URL: http://UA:6003
@@ -49,14 +38,13 @@ services:
       options:
         max-size: "5M"
         max-file: "2"
-    volumes:
-      - ./config:/api/config
     networks:
       - ps_net
       - bs_net
       - tp_net
       - ua_net
       - th_net
+      - th_net_v2
       - nt_net
       - postgres_db
       - mongo_db
@@ -67,9 +55,9 @@ networks:
     name: postgres_db
   mongo_db:
     name: mongo_db
-  ua_net:
+  th_net_v2:
     driver: bridge
-    name: ua_net
+    name: th_net_v2
   bs_redis_db:
     external: true
     name: bs_redis_db

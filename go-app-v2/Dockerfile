@@ -1,40 +1,39 @@
-ARG GO_VERSION=1.20
-
-FROM golang:${GO_VERSION}-alpine AS builder
+FROM golang:1.21-alpine AS builder
 
 RUN apk update && apk add alpine-sdk git && rm -rf /var/cache/apk/*
 
-RUN mkdir -p /api
-WORKDIR /api
+RUN mkdir -p /main
+WORKDIR /main
+
 ENV PORT=8000
 COPY  ./go.mod .
 COPY ./go.sum .
-RUN go mod download
+ENV GOPROXY=https://goproxy.cn,direct
 
-COPY ./src ./src
-RUN go build -o ./app ./src/main.go
+RUN go mod download
+COPY ./ ./
+
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0  go build -o ./app
+
 
 FROM alpine:latest
 
-
-RUN mkdir -p /api
-WORKDIR /api
-COPY --from=builder /api/app .
-COPY  entrypoint.sh .
-# COPY ./src/data ./data 
-
-RUN apk update && apk add ca-certificates unzip curl tzdata \
-    && cd /tmp \ 
-    && curl -OLSs https://github.com/sosedoff/pgweb/releases/download/v0.14.1/pgweb_linux_amd64.zip \
-    && unzip pgweb_linux_amd64.zip \
-    && mv pgweb_linux_amd64 /api/pgweb \
-    && rm -rf /var/bs/log/ | true \ 
-    && mkdir -p /var/bs/log/ \ 
-    && touch /var/bs/log/err.log \ 
-    && touch /var/bs/log/debug.log \
+RUN apk update \
+    && apk add ca-certificates  \
+    && apk add --no-cache tzdata \
     && rm -rf /var/cache/apk/*
 
+RUN mkdir -p /main
+WORKDIR /main
 
-EXPOSE 8080
+COPY --from=builder /main/app .
+ADD https://raw.githubusercontent.com/PiperFinance/CD/main/chains/mainnetV2.json /data/mainnets.json  
 
-ENTRYPOINT ["./entrypoint.sh"]
+RUN rm -rf /var/bs/log/ | true \ 
+    && mkdir -p /var/bs/log/ \ 
+    && touch /var/bs/log/err.log \ 
+    && touch /var/bs/log/debug.log 
+
+EXPOSE 7654
+
+ENTRYPOINT /main/app

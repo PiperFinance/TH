@@ -17,10 +17,10 @@ var (
 func GetUnmarshal() *unmarshal.Unmarshal {
 	selectUnmarshalSdk.Lock()
 	defer selectUnmarshalSdk.Unlock()
-	if selectUnmarshalIdx >= len(sdks) {
-		selectUnmarshalIdx = -1
-	}
 	selectUnmarshalIdx++
+	if selectUnmarshalIdx >= len(sdks) {
+		selectUnmarshalIdx = 0
+	}
 	return sdks[selectUnmarshalIdx]
 }
 
