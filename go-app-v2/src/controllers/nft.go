@@ -27,6 +27,7 @@ func GetNFT(c context.Context, chainId int64, address string, id uint64) (*model
 	t.NFTID = id
 	t.MetaData = tok.TokenURI
 	t.TotalSupply = tok.TotalSupply
+	t.Type = "721"
 	if tx := conf.DB.Create(&t); tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -65,6 +66,7 @@ func GetUserNFTs(c context.Context, chainId int64, address string) ([]*models.NF
 			Symbol:      v.IssuerSpecificData.Name,
 			Name:        v.IssuerSpecificData.Name,
 			NFTID:       id,
+			Type:        v.Type,
 			MetaData:    v.Description,
 			LogoURI:     v.IssuerSpecificData.ImageUrl,
 			TotalSupply: "1",

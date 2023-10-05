@@ -28,6 +28,7 @@ type NFT struct {
 	MetaData    string         `json:"meta"`
 	Verify      bool           `json:"verify"`
 	Owner       common.Address `json:"owner"`
+	Type        string         `json:"type"`
 }
 type NFFT struct {
 	BaseModel
