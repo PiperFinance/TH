@@ -76,6 +76,9 @@ networks:
   ps_net:
     external: true
     name: ps_net
+  ua_net:
+    external: true
+    name: ua_net
   bs_net:
     external: true
     name: bs_net
