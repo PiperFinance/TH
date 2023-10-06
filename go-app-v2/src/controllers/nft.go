@@ -8,7 +8,6 @@ import (
 
 	kc "github.com/PiperFinance/KC"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/eucrypt/unmarshal-go-sdk/pkg/constants"
 )
 
 func GetNFT(c context.Context, chainId int64, address string, id uint64) (*models.NFT, error) {
@@ -32,16 +31,6 @@ func GetNFT(c context.Context, chainId int64, address string, id uint64) (*model
 		return nil, tx.Error
 	}
 	return t, nil
-}
-
-func SelectChain(chainId int64) constants.Chain {
-	switch chainId {
-	case 1:
-		return constants.ETH
-	case 56:
-		return constants.BSC
-	}
-	return ""
 }
 
 func GetUserNFTs(c context.Context, chainId int64, address string) ([]*models.NFT, error) {

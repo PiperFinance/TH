@@ -48,15 +48,19 @@ func main() {
 
 	// No Auth
 	app.Get("/api/health", views.HealthCheck)
-	app.Get("/:chain/tx/:address", views.GetTxHistory)
-	app.Get("/:chain/tx/erc/20/:address", views.GetErc20TrxHistory)
-	app.Get("/:chain/tx/erc/721/:address", views.GetErc721TrxHistory)
+
+	app.Get("/:chain?/tx/:address", views.GetTxHistory)
+	app.Get("/:chain?/tx/erc/20/:address", views.GetErc20TrxHistory)
+	app.Get("/:chain?/tx/erc/721/:address", views.GetErc721TrxHistory)
 	// app.Get("/:chain/tx/erc/1155/:address", views.GetErc1155TrxHistory)
+
+	// NOTE: this is part of KC API
 	app.Get("/:chain/token/:address", views.GetToken)
 	app.Get("/:chain/nft/:address", views.GetNft)
 
 	// Balance
 	app.Get("wallet/:chain/nft/:address", views.GetWalletNft)
+	app.Get("wallet/:chain/token/:address", views.GetWalletToken)
 
 	if err := app.Listen(conf.Config.ApiUrl); err != nil {
 		log.Fatal(err)

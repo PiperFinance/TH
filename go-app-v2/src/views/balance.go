@@ -15,7 +15,7 @@ func GetWalletToken(c *fiber.Ctx) error {
 			"err":    err,
 		})
 	}
-	t, err := controllers.GetUserNFTs(c.Context(), int64(chain), add)
+	t, err := controllers.GetUserTokens(c.Context(), int64(chain), add)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status": "error",

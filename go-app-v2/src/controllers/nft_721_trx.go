@@ -29,10 +29,10 @@ func UpdateAddERC721Trx(c context.Context, chainId int64, address string) error 
 	start := LastPreFetchedTrx(c, "721", chainId, address)
 	if start == 0 {
 		// TODO : make this a bit more dynamic
-		start = end - 10000
+		start = end - conf.Config.MaxScannerDepth
 	}
 	var lastfetched int
-	if end-start > 2 {
+	if end-start > conf.Config.ScannerBlockDelay {
 
 		lastfetched, err = UpdateAddERC721TrxInRange(c, chainId, address, start, end)
 		if err != nil && !strings.Contains(err.Error(), "No transactions found") {

@@ -13,7 +13,7 @@ var (
 		1:          "https://api.etherscan.io/api?",
 		10:         "https://api-optimistic.etherscan.io/api?",
 		56:         "https://api.bscscan.com/api?",
-		110:        "https://api.gnosisscan.io/api?",
+		100:        "https://api.gnosisscan.io/api?",
 		137:        "https://api.polygonscan.com/api?",
 		250:        "https://api.ftmscan.com/api?",
 		1284:       "https://api-moonbeam.moonscan.io/api?",

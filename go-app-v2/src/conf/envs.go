@@ -72,8 +72,9 @@ type config struct {
 	THGetDelayTimeout            time.Duration `env:"TH_GET_DELAY_TIMEOUT" envDefault:"10s"`
 	ScannerApiKeysURL            url.URL       `env:"SCANNER_API_KEY_URL" envDefault:"http://154.49.243.32:6005"`
 	GITHUB_TOKEN                 string        `env:"GITHUB_TOKEN"`
-
-	ZapLogLevel zapcore.Level
+	MaxScannerDepth              uint64        `env:"MAX_SCANNER_BLOCK_DEPTH" envDefault:"100000"`
+	ScannerBlockDelay            uint64        `env:"SCANNER_BLOCK_DELAY" envDefault:"10"`
+	ZapLogLevel                  zapcore.Level
 }
 
 var Config config

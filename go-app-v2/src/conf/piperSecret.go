@@ -10,7 +10,7 @@ import (
 
 const (
 	RepoName         = "SS"
-	OrgName          = "PiperFinance"
+	OrgName          = "NFEL"
 	BranchName       = "main"
 	GithubRawBaseUrl = "https://raw.githubusercontent.com"
 )
@@ -32,18 +32,17 @@ func LoadSecretStoage(githubToken string) {
 	if githubToken == "" {
 		panic("Empty Github Token")
 	}
-	url, err := url.Parse(GithubRawBaseUrl)
-	url = url.JoinPath(OrgName, RepoName, BranchName)
+	u, err := url.Parse(GithubRawBaseUrl)
+	u = u.JoinPath(OrgName, RepoName, BranchName)
+	u.User = url.UserPassword("x-access-token", githubToken)
 	if err != nil {
 		panic(err)
 	}
-	apiKUrl := url.JoinPath("ScannerApiKeys.json")
+	apiKUrl := u.JoinPath("ScannerApiKeys.json")
 	req, err := http.NewRequest("GET", apiKUrl.String(), nil)
 	if err != nil {
 		panic(err)
 	}
-	req.Header.Add("Authorization", "token "+githubToken)
-	req.Header.Add("Accept", "application/vnd.github.v4+raw")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		panic(err)
@@ -56,18 +55,16 @@ func LoadSecretStoage(githubToken string) {
 
 	err = json.Unmarshal(scannerKeys, &Secrets.ScannerApiKey)
 	if err != nil {
-		fmt.Println(string(scannerKeys), url.String(), "-----", apiKUrl.String())
+		fmt.Println(string(scannerKeys), "-----", apiKUrl.String(), "-----", githubToken)
 		panic(err)
 	}
 
 	// [unmarshal](https://docs.unmarshal.io/reference/golang-sdk) API Keys
-	mApiKUrl := url.JoinPath("UnmarshalApiKeys.json")
+	mApiKUrl := u.JoinPath("UnmarshalApiKeys.json")
 	req, err = http.NewRequest("GET", mApiKUrl.String(), nil)
 	if err != nil {
 		panic(err)
 	}
-	req.Header.Add("Authorization", "token "+githubToken)
-	req.Header.Add("Accept", "application/vnd.github.v4+raw")
 	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
 		panic(err)
@@ -79,7 +76,7 @@ func LoadSecretStoage(githubToken string) {
 	resp.Body.Close()
 	err = json.Unmarshal(mApiKeys, &Secrets.UnmarshalApiKeys)
 	if err != nil {
-		fmt.Println(string(scannerKeys), url.String(), "-----", apiKUrl.String())
+		fmt.Println(string(scannerKeys), "-----", apiKUrl.String(), "-----", githubToken)
 		panic(err)
 	}
 }
